@@ -1,10 +1,13 @@
 {
 	"dapp": {
 		"app": {
-			"title": "My Ethereum ÐApp"
+			"title": "NazeCoin"
 			, "buttons": {
-				"view1": "View1"
-				, "view2": "View2"
+				"search": "Search"
+				, "account": "My Account"
+				, "trending": "Trending"
+				, "top": "Top"
+				, "new": "New"
 			}
 			, "headers": {
 				"identicon": "Identicon"
@@ -20,7 +23,7 @@
 				, "mining": "Mining"
 				, "gasPrice": "Gas Price"
 			}
-			, "copyright": "Copyright © My Ethereum ÐApp 2015. All Rights Reserved"
+			, "copyright": "Copyright © NazeCoin 2018. All Rights Reserved"
 		}
 		, "components": {
 			"balance": {
@@ -41,14 +44,20 @@
 			, "networkHealth": {
 				"header": "Network Health"			
 			}
+			, "searchBox": {
+				"placeholder" : "Search for a twitter handle..."
+			}
 		}
-		, "view1": {
-			"title": "View 1"
-			, "defaultName": "View1"
+		, "search": {
+			"title": "Search"
+			, "defaultName": "search"
 		}
-		, "view2": {
-			"title": "View 2"
-			, "defaultName": "View2"
+		, "account": {
+			"title": "Account"
+			, "defaultName": "Account"
+		}, "list": {
+			"title": "List"
+			, "defaultName": "List"
 		}
 	}
 }

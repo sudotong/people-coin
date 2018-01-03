@@ -1,0 +1,4 @@
+.navbar-middle  {
+    margin: 0 calc(50% - 120px);
+    position: absolute;
+}

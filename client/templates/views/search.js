@@ -11,7 +11,7 @@ The view1 template
 @constructor
 */
 
-Template['views_view1'].helpers({
+Template['views_search'].helpers({
     /**
     Get the name
 
@@ -19,11 +19,11 @@ Template['views_view1'].helpers({
     */
 
     'name': function(){
-        return this.name || TAPi18n.__('dapp.view1.defaultName');
+        return this.name || TAPi18n.__('dapp.search.defaultName');
     }
 });
 
 // When the template is created
-Template['views_view1'].onCreated(function(){
-	Meta.setSuffix(TAPi18n.__("dapp.view1.title"));
+Template['views_search'].onCreated(function(){
+	Meta.setSuffix(TAPi18n.__("dapp.search.title"));
 });

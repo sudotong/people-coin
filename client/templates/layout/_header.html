@@ -7,15 +7,33 @@
                 </a>
 			</div>
 
+            <ul class="nav navbar-nav navbar-middle">
+                <li>
+                    <a href="{{ pathFor 'list' }}">
+                        {{{i18n 'dapp.app.buttons.trending'}}}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ pathFor 'list' }}">
+                        {{{i18n 'dapp.app.buttons.top'}}}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ pathFor 'list' }}">
+                        {{{i18n 'dapp.app.buttons.new'}}}
+                    </a>
+                </li>
+            </ul>
+
 			<ul class="nav navbar-nav navbar-right">
 				<li>
-                    <a href="{{ pathFor 'view1' }}">
-                        {{{i18n 'dapp.app.buttons.view1'}}}
+                    <a href="{{ pathFor 'search' }}">
+                        {{{i18n 'dapp.app.buttons.search'}}}
                     </a>
                 </li>
 				<li>
-                    <a href="{{ pathFor 'view2' }}">
-                        {{{i18n 'dapp.app.buttons.view2'}}}
+                    <a href="{{ pathFor 'account' }}">
+                        {{{i18n 'dapp.app.buttons.account'}}}
                     </a>
                 </li>
 			</ul>

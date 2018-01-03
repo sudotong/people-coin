@@ -34,18 +34,25 @@ The receive route, showing the wallet overview
 
 // Default route
 Router.route('/', {
-    template: 'views_view1',
+    template: 'views_search',
     name: 'home'
 });
 
-// Route for view1
-Router.route('/view1', {
-    template: 'views_view1',
-    name: 'view1'
+// Route for search page
+Router.route('/search', {
+    template: 'views_search',
+    name: 'search'
 });
 
-// Route for view2
-Router.route('/view2', {
-    template: 'views_view2',
-    name: 'view2'
+// Route for Account page
+Router.route('/account', {
+    template: 'views_account',
+    name: 'account'
+});
+
+// Route for List page
+// TODO handle top/live/new
+Router.route('/list', {
+    template: 'views_list',
+    name: 'list'
 });
