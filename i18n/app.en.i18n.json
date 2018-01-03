@@ -6,7 +6,7 @@
     },
     "error": {
         "insufficientRights": "You don't have enough rights for this action."
-		, "notFound": "Page not found..."
+		, "notFound": "Page not found!"
     },
     "buttons": {
         "ok": "OK",

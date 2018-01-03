@@ -8,6 +8,7 @@
 				, "trending": "Trending"
 				, "top": "Top"
 				, "new": "New"
+				, "faq": "Frequently Asked Questions"
 			}
 			, "headers": {
 				"identicon": "Identicon"
@@ -58,6 +59,9 @@
 		}, "list": {
 			"title": "List"
 			, "defaultName": "List"
+		}, "faq": {
+			"title": "FAQ"
+			, "defaultName": "Frequently Asked Questions"
 		}
 	}
 }

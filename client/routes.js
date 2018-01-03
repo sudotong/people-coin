@@ -56,3 +56,8 @@ Router.route('/list', {
     template: 'views_list',
     name: 'list'
 });
+
+Router.route('/faq', {
+    template: 'views_faq',
+    name: 'faq'
+});
