@@ -5,6 +5,9 @@ http://dinukshaish.blogspot.com/2017/03/creating-dapp-using-ethereum-and-meteor.
 
 install geth: https://github.com/ethereum/go-ethereum/wiki/Installation-instructions-for-Windows
 
+Twitter search: http://strangemilk.com/twitter-api-with-javascript/#twittertldr
+
+
 `meteor npm install`
 
 Run
