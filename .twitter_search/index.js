@@ -33,13 +33,15 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 app.use(express.static('public'));
 
 //post to retrieve user data
-app.post('/twitter/user', function (req, res) {
-	var username = req.body.username;
+app.get('/twitter/user', function (req, res) {
+	var username = req.query.username;
 	var data = twitter.getUser({ screen_name: username}, function(error, response, body){
+		console.log('error', error);
 		res.status(404).send({
 			"error" : "User Not Found"
 		});
 	}, function(data){
+		console.log('data', data);
 		res.send({
 			result : {
 				"userData" : data
@@ -53,3 +55,5 @@ var server = app.listen(3000, function () {
   	var host = server.address().address;
   	var port = server.address().port;
 });
+
+// run the app and go to url http://localhost:3000/twitter/user?username=sudotong
