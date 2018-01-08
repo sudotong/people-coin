@@ -10,7 +10,9 @@ Twitter search: http://strangemilk.com/twitter-api-with-javascript/#twittertldr
 
 `meteor npm install`
 
-Run
-```geth --rpc --rpccorsdomain "http://localhost:3000"```
-```meteor```
+Run it:
 
+```geth --rpc --rpccorsdomain "http://localhost:3000" --etherbase 45d71b61cb4394bfee56ba926cf1f134dd7d500a```
+
+```meteor```
+etherbase address : 45d71b61cb4394bfee56ba926cf1f134dd7d500a

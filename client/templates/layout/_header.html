@@ -9,17 +9,17 @@
 
             <ul class="nav navbar-nav navbar-middle">
                 <li>
-                    <a href="{{ pathFor 'list' }}">
+                    <a href="{{ pathFor route='list.show' data=getTrending }}">
                         {{{i18n 'dapp.app.buttons.trending'}}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ pathFor 'list' }}">
+                    <a href="{{ pathFor route='list.show' data=getTop }}">
                         {{{i18n 'dapp.app.buttons.top'}}}
                     </a>
                 </li>
                 <li>
-                    <a href="{{ pathFor 'list' }}">
+                    <a href="{{ pathFor route='list.show' data=getNew }}">
                         {{{i18n 'dapp.app.buttons.new'}}}
                     </a>
                 </li>

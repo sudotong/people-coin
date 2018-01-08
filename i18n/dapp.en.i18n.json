@@ -1,7 +1,7 @@
 {
 	"dapp": {
 		"app": {
-			"title": "NazeCoin"
+			"title": "PeopleCoin"
 			, "buttons": {
 				"search": "Search"
 				, "account": "My Account"
@@ -34,6 +34,20 @@
 			, "accounts": {
 				"header": "My Accounts"
 				, "description": "These are your Ethereum addresses. The identicons are generated based on the address value. Note, balance is static."			
+			}
+			, "sellContract": {
+				"header": "Sell Contract"
+				, "description": "Sell holdings. Note, if the sell result remains zero you may not have enough ETH for the transaction fee."
+				, "create": "Sell"
+				, "deployed": "The contract was deployed to this address"
+				, "placeholder": "Number To Sell"
+			}
+			, "buyContract": {
+				"header": "Buy Contract"
+				, "description": "Make a purchase. Note, if the buy result remains zero you may not have enough ETH for the transaction fee."
+				, "create": "Buy"
+				, "deployed": "The contract was deployed to this address"
+				, "placeholder": "Number To Buy"
 			}
 			, "multiplyContract": {
 				"header": "Multiply Contract"

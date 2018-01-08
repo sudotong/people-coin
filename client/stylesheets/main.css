@@ -2,3 +2,11 @@
     margin: 0 calc(50% - 120px);
     position: absolute;
 }
+
+.twitter-search{
+    margin-top: 0;
+}
+
+.at-signup-link{
+    display: none;
+}

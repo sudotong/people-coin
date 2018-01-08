@@ -1,15 +1,15 @@
 <template name="components_transaction">
     <div class="row">
         <div class="col-md-12">
-            <input>
+            <input placeholder="$0.00" type="number" />
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
-            {{> components_multiplyContract}}
+            {{> components_buyContract}}
         </div>
         <div class="col-md-6">
-            {{> components_multiplyContract}}
+            {{> components_sellContract}}
         </div>
     </div>
 </template>

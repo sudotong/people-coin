@@ -55,3 +55,7 @@ check
 chuangbo:cookie
 silentcicero:solc
 # mike:mocha # this package is failing
+accounts-twitter
+accounts-ui
+useraccounts:ratchet
+service-configuration
