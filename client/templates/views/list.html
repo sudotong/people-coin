@@ -1,6 +1,6 @@
 <template name="views_list">
     <div class="row-fluid">
-        This is where everything will be listed out
+        <h3>{{viewType}} People Bets</h3>
         {{#each friend in friends}}
             <div>({{friend.numTrades}}) {{friend.screen_name}} -- Last traded: {{formatTime friend.lastTrade "MM-DD"}} -- Created: {{formatTime friend.created "MM-DD"}}</div>
         {{else}}
