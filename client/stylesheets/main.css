@@ -10,3 +10,8 @@
 .at-signup-link{
     display: none;
 }
+
+.logoutBtn{
+    display: block;
+    margin: 0 auto;
+}

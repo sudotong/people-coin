@@ -1,6 +1,10 @@
 <template name="views_list">
     <div class="row-fluid">
-            This is where everything will be listed out
-            <!--{{> components_multiplyContract}}-->
+        This is where everything will be listed out
+        {{#each friend in friends}}
+            <div>({{friend.numTrades}}) {{friend.screen_name}} -- Last traded: {{formatTime friend.lastTrade "MM-DD"}} -- Created: {{formatTime friend.created "MM-DD"}}</div>
+        {{else}}
+            <div>No users found</div>
+        {{/each}}
     </div>
 </template>

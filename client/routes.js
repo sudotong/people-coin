@@ -75,11 +75,7 @@ Router.route('/list/:_id', function(){
     var type = this.params._id;
     if (['top', 'trending', 'new'].indexOf(type) > -1){
         this.render('views_list', {
-            data: function () {
-                console.log('Need to return the data for the view: ', type);
-                return null;
-                // return Posts.findOne({type: type});
-            }
+            data: {viewType: type}
         });
     } else {
         this.render('layout_notFound');
