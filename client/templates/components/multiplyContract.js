@@ -39,7 +39,7 @@ Template['components_multiplyContract'].helpers({
 
 	'source': function(){
 		return source;
-	},
+	}
 });
 
 Template['components_multiplyContract'].events({
@@ -67,14 +67,12 @@ Template['components_multiplyContract'].events({
         // estimate gas cost then transact new MultiplyContract
         web3.eth.estimateGas(transactionObject, function(err, estimateGas){
             // multiply by 10 hack for testing
-            if(!err)
-                transactionObject.gas = estimateGas * 10;
-            
-            MultiplyContract.new(transactionObject, 
-                                 function(err, contract){
-                if(err)
+            if(!err) transactionObject.gas = estimateGas * 10;
+            MultiplyContract.new(transactionObject, function(err, contract){
+                if(err){
                     return TemplateVar.set(template, 'state', {isError: true, error: String(err)});
-                
+                }
+
                 if(contract.address) {
                     TemplateVar.set(template, 'state', {isMined: true, address: contract.address, source: source});
                     contractInstance = contract;
@@ -96,12 +94,10 @@ Template['components_multiplyContract'].events({
         
         // call MultiplyContract method `multiply` which should multiply the `value` by 7
 		contractInstance.multiply.call(value, function(err, result){
-            TemplateVar.set(template, 'multiplyResult'
-                            , result.toNumber(10));
-            
-            if(err)
-                TemplateVar.set(template, 'multplyResult'
-                                , String(err));
+            TemplateVar.set(template, 'multiplyResult', result.toNumber(10));
+            if(err){
+                TemplateVar.set(template, 'multplyResult', String(err));
+            }
         });
-	},
+	}
 });

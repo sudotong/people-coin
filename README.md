@@ -15,4 +15,11 @@ Run it:
 ```geth --rpc --rpccorsdomain "http://localhost:3000" --etherbase 45d71b61cb4394bfee56ba926cf1f134dd7d500a```
 
 ```meteor```
+
 etherbase address : 45d71b61cb4394bfee56ba926cf1f134dd7d500a
+
+
+// more ideas:
+
+- Store the number of searches and views per twitter account on purchase on the ETH blockchain?
+- How do we do more in general on the blockchain in a decentralized fashion
