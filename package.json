@@ -9,6 +9,7 @@
     "babel-runtime": "^6.26.0",
     "meteor-node-stubs": "^0.3.2",
     "twitter": "^1.7.1",
-    "twitter-node-client": "0.0.6"
+    "twitter-node-client": "0.0.6",
+    "zeppelin-solidity": "^1.5.0"
   }
 }
