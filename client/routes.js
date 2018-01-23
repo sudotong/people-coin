@@ -19,7 +19,7 @@ ApplicationController = RouteController.extend({
     layoutTemplate: 'layout_main',
     onBeforeAction: function () {
         // do some login checks or other custom logic
-        if (!Meteor.userId()) {
+        if (EthAccounts.find().fetch().length === 0) {
             // if the user is not logged in, render the Login template
             this.render('login');
         } else {

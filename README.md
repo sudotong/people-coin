@@ -26,7 +26,8 @@ Run `meteor npm install`
 
 ## Running the tests
 
-TBD
+TODO write tests with truffle https://github.com/blmalone/eth-smart-contracts
+
 
 ### Break down into end to end tests
 

@@ -9,17 +9,6 @@
 // configure twitter
 Meteor.startup(function() {
 
-    ServiceConfiguration.configurations.update(
-        {"service": "twitter"},
-        {
-            $set: {
-                "consumerKey": "RukEAX94pvZQYas53FpqsexyE",
-                "secret": "FcCOQmds98ZlbrIJyvGB5W2qJyQZHM6WITySJQLwxFz2xJqYGu"
-            }
-        },
-        {upsert: true}
-    );
-
 
     var Twitter = require('twitter');
     var client = new Twitter({
