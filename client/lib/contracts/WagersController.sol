@@ -1,10 +1,10 @@
 //pragma solidity ^0.4.18;
-import "./Rewards.sol";
-import "./Events.sol";
-import "./Admin.sol";
-import "./Wagers.sol";
-import "./Mevu.sol";
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../Rewards.sol";
+import "../Events.sol";
+import "../Admin.sol";
+import "../Wagers.sol";
+import "../Mevu.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract WagersController is Ownable {
     mapping (address => bool) private isAuthorized; 

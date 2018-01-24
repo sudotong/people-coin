@@ -1,7 +1,7 @@
 //pragma solidity ^0.4.18;
-import "./Oracles.sol";
-import "./Wagers.sol";
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../Oracles.sol";
+import "../Wagers.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract Events is Ownable {
     mapping (address => bool) private isAuthorized;

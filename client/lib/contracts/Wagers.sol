@@ -1,9 +1,9 @@
 //pragma solidity ^0.4.18;
-import "./Rewards.sol";
-import "./Events.sol";
-import "./Admin.sol";
-import "./Mevu.sol";
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../Rewards.sol";
+import "../Events.sol";
+import "../Admin.sol";
+import "../Mevu.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 contract Wagers is Ownable {
 

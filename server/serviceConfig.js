@@ -10,8 +10,8 @@
 Meteor.startup(function() {
 
 
-    var Twitter = require('twitter');
-    var client = new Twitter({
+    let Twitter = require('twitter');
+    let client = new Twitter({
         consumer_key: "RukEAX94pvZQYas53FpqsexyE",
         consumer_secret: "FcCOQmds98ZlbrIJyvGB5W2qJyQZHM6WITySJQLwxFz2xJqYGu",
 

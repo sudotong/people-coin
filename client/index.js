@@ -23,7 +23,7 @@ Meteor.startup(function() {
     // set providor, which should be a geth node
     // my RPC settings are: 
     // geth --rpc --rpcaddr="0.0.0.0" --rpccorsdomain="*" --mine --unlock=YOUR_ACCOUNT --verbosity=5 --maxpeers=0 --minerthreads="3"
-    var provider = new web3.providers.HttpProvider("http://localhost:8545");
+    let provider = new web3.providers.HttpProvider("http://localhost:8545");
     if(typeof web3 === 'undefined'){
         web3 = new Web3(provider);
     } else {
@@ -38,7 +38,7 @@ Meteor.startup(function() {
     if(Cookie.get('TAPi18next')) {
         TAPi18n.setLanguage(Cookie.get('TAPi18next'));
     } else {
-        var userLang = navigator.language || navigator.userLanguage,
+        let userLang = navigator.language || navigator.userLanguage,
         availLang = TAPi18n.getLanguages();
 
         // set default language

@@ -72,7 +72,7 @@ Router.route('/list', function(){
 });
 
 Router.route('/list/:_id', function(){
-    var type = this.params._id;
+    let type = this.params._id;
     if (['top', 'trending', 'new'].indexOf(type) > -1){
         this.render('views_list', {
             data: {viewType: type}

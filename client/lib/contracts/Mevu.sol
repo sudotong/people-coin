@@ -1,13 +1,13 @@
 //pragma solidity ^0.4.18;
 
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "../../ethereum-api/usingOraclize.sol";
-import "./Events.sol";
-import "./Admin.sol";
-import "./Wagers.sol";
-import "./Rewards.sol";
-import "./Oracles.sol";
-import "./MvuToken.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../oracalizeAPI.sol";
+import "../Events.sol";
+import "../Admin.sol";
+import "../Wagers.sol";
+import "../Rewards.sol";
+import "../Oracles.sol";
+import "../MvuToken.sol";
 
 contract Mevu is Ownable, usingOraclize {
 

@@ -1,11 +1,11 @@
 //pragma solidity 0.4.18;
-import "./Events.sol";
-import "./OracleVerifier.sol";
-import "./Rewards.sol";
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
-import "./MvuToken.sol";
-import "./Wagers.sol";
-import "./Mevu.sol";
+import "../Events.sol";
+import "../OracleVerifier.sol";
+import "../Rewards.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../MvuToken.sol";
+import "../Wagers.sol";
+import "../Mevu.sol";
 
 contract Oracles is Ownable {  
 

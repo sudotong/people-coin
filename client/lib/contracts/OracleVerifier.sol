@@ -1,5 +1,5 @@
 //pragma solidity 0.4.18;
-import "node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../../../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /** @title Oracle Verifier -- This contract controls the adding to and removal from the list of verified oracles.
   * 

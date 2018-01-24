@@ -17,7 +17,7 @@ Package.registerBuildPlugin({
         "plugin/handler.js",
     ],
 	npmDependencies: {
-		"solc": "0.4.10"
+		"solc": "0.4.18"
 	}
 });
 
