@@ -15,3 +15,13 @@
     display: block;
     margin: 0 auto;
 }
+
+.card.small .card-image{
+     max-height: none;
+     overflow: unset;
+}
+
+.card.small a:hover, a:focus {
+     color: white;
+     text-decoration: none !important;
+}

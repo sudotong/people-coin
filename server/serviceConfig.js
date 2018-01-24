@@ -77,10 +77,26 @@ Meteor.startup(function() {
     // I20180108-02:23:01.955(-8)?        blocked_by: false,
     // I20180108-02:23:01.956(-8)?        translator_type: 'none' },
 
+    var keys = [];
+    var data = {};
     client.get('friends/list', {count: 200, include_user_entities: false, skip_status: true}, function(error, friends, response) {
         console.log('friends', friends ? JSON.stringify(friends.users.map(function(f){
+            if (keys.indexOf(f.screen_name) == -1 && f.profile_image_url) {
+                keys.push(f.screen_name);
+                data[f.screen_name] = {profile_image_url: f.profile_image_url, description: f.description};
+            }
             return f.screen_name;
         })) : "??");
+
+        // console.log('\ndata: ', JSON.stringify(data));
+
+        // Keys:
+        // ["id","id_str","name","screen_name","location","url","description","protected","followers_count","friends_count","listed_count","created_at",
+        // "favourites_count","utc_offset","time_zone","geo_enabled","verified","statuses_count","lang","contributors_enabled","is_translator",
+        // "is_translation_enabled","profile_background_color","profile_background_image_url","profile_background_image_url_https","profile_background_tile",
+        // "profile_image_url","profile_image_url_https","profile_banner_url","profile_link_color","profile_sidebar_border_color","profile_sidebar_fill_color",
+        // "profile_text_color","profile_use_background_image","has_extended_profile","default_profile","default_profile_image","following","live_following",
+        // "follow_request_sent","notifications","muting","blocking","blocked_by","translator_type"]
     });
 
 });

@@ -54,9 +54,5 @@ check
 
 chuangbo:cookie
 # mike:mocha # this package is failing
-accounts-twitter
-accounts-ui
-useraccounts:ratchet
-service-configuration
-sebdah:autocompletion
 blmalone:solc
+materialize:materialize

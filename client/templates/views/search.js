@@ -20,6 +20,9 @@ Template['views_search'].helpers({
 
     'name': function(){
         return this.name || TAPi18n.__('dapp.search.defaultName');
+    },
+    'peep': function(){
+        return this.peep;
     }
 });
 

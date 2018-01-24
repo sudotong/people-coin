@@ -28,7 +28,7 @@ Template['components_accounts'].helpers({
     */
 
 	'fromWei': function(weiValue, type){
-		return web3.fromWei(weiValue, type).toString(10);
+		return web3 ? web3.fromWei(weiValue, type).toString(10) : null;
 	},
 
     

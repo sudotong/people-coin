@@ -19,7 +19,7 @@ ApplicationController = RouteController.extend({
     layoutTemplate: 'layout_main',
     onBeforeAction: function () {
         // do some login checks or other custom logic
-        if (EthAccounts.find().fetch().length === 0) {
+        if (EthAccounts.find().fetch().length === -1) {
             // if the user is not logged in, render the Login template
             this.render('login');
         } else {
@@ -73,6 +73,7 @@ Router.route('/list', function(){
 
 Router.route('/list/:_id', function(){
     let type = this.params._id;
+    defaultView(this);
     if (['top', 'trending', 'new'].indexOf(type) > -1){
         this.render('views_list', {
             data: {viewType: type}
@@ -82,10 +83,29 @@ Router.route('/list/:_id', function(){
     }
 }, {
     name: 'list.show',
-    layoutTemplate: 'layout_main'
+});
+
+Router.route('/search/:_id', function(){
+    defaultView(this);
+    let peep = TwitterFriends.findOne({screen_name: this.params._id});
+    if (peep){
+        this.render('views_search', {
+            data: {peep}
+        });
+    } else {
+        this.render('layout_notFound');
+    }
+}, {
+    name: 'search.show',
 });
 
 Router.route('/faq', {
     template: 'views_faq',
     name: 'faq'
 });
+
+function defaultView(self){
+    self.layout('layout_main');
+    self.render('layout_header', {to: 'header'});
+    self.render('layout_footer', {to: 'footer'});
+}
