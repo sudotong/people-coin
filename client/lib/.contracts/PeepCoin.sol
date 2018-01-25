@@ -3,15 +3,15 @@ pragma solidity ^0.4.18;
 import "github.com/OpenZeppelin/zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
 
 /**
- * @title MvuToken
+ * @title PeepCoin
  * @dev Mintable ERC20 Token which also controls a one-time bet contract, token transfers locked until sale ends.
  * Based on code by TokenMarketNet: https://github.com/TokenMarketNet/ico/blob/master/contracts/MintableToken.sol
  */
 
 
-contract MvuToken is MintableToken {
+contract PeepCoin is MintableToken {
     event TokensMade(address indexed to, uint amount);
-    uint  saleEnd = 1519022651; // TODO: Update with actual date
+    uint saleEnd = 1519022651; // TODO: Update with actual date
     uint betsEnd = 1519000651;  // TODO: Update with actual date
     uint tokenCap = 100000000; // TODO: Update with actual cap
 
@@ -33,7 +33,7 @@ contract MvuToken is MintableToken {
         _;
     }
 
-    function MvuToken (uint initFounderSupply) public {
+    function PeepCoin (uint initFounderSupply) public {
         balances[msg.sender] = initFounderSupply;
         TokensMade(msg.sender, initFounderSupply);
         mint(msg.sender, initFounderSupply);

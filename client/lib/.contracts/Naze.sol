@@ -1,11 +1,11 @@
 pragma solidity ^0.4.18;
 
 
-import "./MvuToken.sol";
+import "./PeepCoin.sol";
 
 contract WagersController is Ownable {
     mapping (address => bool) private isAuthorized;
-    Mevu mevu;
+    PPC ppcoin;
     Wagers wagers;
     Events events;
     Admin admin;
@@ -47,7 +47,7 @@ contract WagersController is Ownable {
     }
 
     modifier notPaused() {
-        require (!mevu.getContractPaused());
+        require (!ppcoin.getContractPaused());
         _;
     }
 
@@ -71,7 +71,7 @@ contract WagersController is Ownable {
 
     function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
 
-    function setMevuContract (address thisAddr) external onlyOwner { mevu = Mevu(thisAddr); }
+    function setPPCContract (address thisAddr) external onlyOwner { ppcoin = PPC(thisAddr); }
 
     function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
 
@@ -88,13 +88,9 @@ contract WagersController is Ownable {
       */
     function makeWager(bytes32 wagerId, uint value, bytes32 eventId, uint odds) public notMade(wagerId) eventUnlocked(eventId) requireMinWager checkBalance(value) notPaused payable {
 
-        wagers.makeWager  ( wagerId,
-            value,
-            eventId,
-            odds,
-            msg.sender);
-        transferEthToMevu(msg.value);
-        mevu.addToPlayerFunds(msg.value);
+        wagers.makeWager( wagerId, value, eventId, odds, msg.sender);
+        transferEthToPPC(msg.value);
+        ppcoin.addToPlayerFunds(msg.value);
         //events.addWager(eventId, wagerId);
         rewards.addEth(msg.sender, msg.value);
         rewards.subUnlockedEth(msg.sender, (value - msg.value));
@@ -107,8 +103,8 @@ contract WagersController is Ownable {
         uint expectedValue = wagers.getOrigValue(id) / (wagers.getOdds(id) / 100);
         require (rewards.getUnlockedEthBalance(msg.sender) + msg.value >= expectedValue);
         address taker = msg.sender;
-        transferEthToMevu(msg.value);
-        mevu.addToPlayerFunds(msg.value);
+        transferEthToPPC(msg.value);
+        ppcoin.addToPlayerFunds(msg.value);
         rewards.subUnlockedEth(msg.sender, (expectedValue - msg.value));
         rewards.addEth(msg.sender, msg.value);
         wagers.setTaker(id, taker);
@@ -118,7 +114,7 @@ contract WagersController is Ownable {
 
     }
 
-    function transferEthToMevu (uint amount) internal { mevu.transfer(amount); }
+    function transferEthToPPC (uint amount) internal { ppcoin.transfer(amount); }
 
 }
 
@@ -126,7 +122,7 @@ contract Wagers is Ownable {
 
     Events events;
     Rewards rewards;
-    Mevu mevu;
+    PPC ppcoin;
 
     struct Wager {
         bytes32 eventId;
@@ -198,9 +194,9 @@ contract Rewards is Ownable {
     Admin admin;
     Wagers wagers;
     mapping (address => uint) public ethBalance;
-    mapping (address => uint) public mvuBalance;
+    mapping (address => uint) public peepBalance;
     mapping(address => uint) public unlockedEthBalance;
-    mapping (address => uint) public unlockedMvuBalance;
+    mapping (address => uint) public unlockedPeepBalance;
 
     modifier onlyAuth () {
         require(isAuthorized[msg.sender]);
@@ -217,25 +213,25 @@ contract Rewards is Ownable {
 
     function getEthBalance(address user) external view returns (uint) { return ethBalance[user]; }
 
-    function getMvuBalance(address user) external view returns (uint) { return mvuBalance[user]; }
+    function getPeepBalance(address user) external view returns (uint) { return peepBalance[user]; }
 
     function getUnlockedEthBalance(address user) external view returns (uint) { return unlockedEthBalance[user]; }
 
-    function getUnlockedMvuBalance(address user) external view returns (uint) { return unlockedMvuBalance[user]; }
+    function getUnlockedPeepBalance(address user) external view returns (uint) { return unlockedPeepBalance[user]; }
 
     function subEth(address user, uint amount) external onlyAuth { ethBalance[user] -= amount; }
 
-    function subMvu(address user, uint amount) external onlyAuth { mvuBalance[user] -= amount; }
+    function subPeep(address user, uint amount) external onlyAuth { peepBalance[user] -= amount; }
 
     function addEth(address user, uint amount) external onlyAuth { ethBalance[user] += amount; }
 
-    function addMvu(address user, uint amount) external onlyAuth { mvuBalance[user] += amount; }
+    function addPeep(address user, uint amount) external onlyAuth { peepBalance[user] += amount; }
 
-    function subUnlockedMvu(address user, uint amount) external onlyAuth { unlockedMvuBalance[user] -= amount; }
+    function subUnlockedPeep(address user, uint amount) external onlyAuth { unlockedPeepBalance[user] -= amount; }
 
     function subUnlockedEth(address user, uint amount) external onlyAuth { unlockedEthBalance[user] -= amount; }
 
-    function addUnlockedMvu(address user, uint amount) external onlyAuth { unlockedMvuBalance[user] += amount; }
+    function addUnlockedPeep(address user, uint amount) external onlyAuth { unlockedPeepBalance[user] += amount; }
 
     function addUnlockedEth(address user, uint amount) external onlyAuth { unlockedEthBalance[user] += amount; }
 }
@@ -245,20 +241,20 @@ contract Rewards is Ownable {
 
 
 
-contract Mevu is Ownable {
+contract PPC is Ownable {
 
-    address mevuWallet;
+    address peepWallet;
     Events events;
     Admin admin;
     Wagers wagers;
     Rewards rewards;
-    MvuToken mvuToken;
+    PeepCoin peepCoins;
 
     bool  contractPaused = false;
     bool  randomNumRequired = false;
     bool settlementPeriod = false;
     uint lastIteratedIndex = 0;
-    uint  mevuBalance = 0;
+    uint  peepBalance = 0;
     uint  lotteryBalance = 0;
     uint serviceFee = 3; //Percent
     //  TODO: Set equal to launch date + one month in unix epoch seocnds
@@ -318,14 +314,14 @@ contract Mevu is Ownable {
 
     function () payable public {
         if (msg.sender != address(wagers)) {
-            mevuBalance += msg.value;
+            peepBalance += msg.value;
         }
     }
 
     // Constructor
-    function Mevu () payable public {
-        mevuWallet = msg.sender;
-        mvuToken = MvuToken(0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb); //TODO: Update with actual token address
+    function PPC () payable public {
+        peepWallet = msg.sender;
+        peepCoins = PeepCoin(0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb); //TODO: Update with actual token address
     }
 
     function grantAuthority (address nowAuthorized) public onlyOwner { isAuthorized[nowAuthorized] = true; }
@@ -340,35 +336,35 @@ contract Mevu is Ownable {
 
     function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
 
-    function setMvuTokenContract (address thisAddr) external onlyOwner { mvuToken = MvuToken(thisAddr); }
+    function setPeepCoinContract (address thisAddr) external onlyOwner { peepCoins = PeepCoin(thisAddr); }
 
-    function setMevuWallet (address newAddress) public onlyOwner { mevuWallet = newAddress; }
+    function setPPCWallet (address newAddress) public onlyOwner { peepWallet = newAddress; }
 
     function abandonContract() external onlyPaused {
         require(!abandoned[msg.sender]);
         abandoned[msg.sender] = true;
         uint ethBalance =  rewards.getEthBalance(msg.sender);
-        uint mvuBalance = rewards.getMvuBalance(msg.sender);
+        uint peepBalance = rewards.getPeepBalance(msg.sender);
         playerFunds -= ethBalance;
         if (ethBalance > 0) {
             msg.sender.transfer(ethBalance);
         }
-        if (mvuBalance > 0) {
-            mvuToken.transfer(msg.sender, mvuBalance);
+        if (peepBalance > 0) {
+            peepCoins.transfer(msg.sender, peepBalance);
         }
     }
 
 
-    function withdraw(uint eth, uint mvu) notPaused external {
+    function withdraw(uint eth, uint peep) notPaused external {
         require (rewards.getUnlockedEthBalance(msg.sender) >= eth);
         rewards.subUnlockedEth(msg.sender, eth);
         rewards.subEth(msg.sender, eth);
         playerFunds -= eth;
         msg.sender.transfer(eth);
-        require (rewards.getUnlockedMvuBalance(msg.sender) >= mvu);
-        rewards.subUnlockedMvu(msg.sender, mvu);
-        rewards.subMvu(msg.sender, mvu);
-        mvuToken.transfer (msg.sender, mvu);
+        require (rewards.getUnlockedPeepBalance(msg.sender) >= peep);
+        rewards.subUnlockedPeep(msg.sender, peep);
+        rewards.subPeep(msg.sender, peep);
+        peepCoins.transfer (msg.sender, peep);
 
     }
 
@@ -400,13 +396,13 @@ contract Mevu is Ownable {
                 uint payoutValue = 90; // TODO get amount
                 uint fee = (payoutValue/100) * 2; // Sevice fee is 2 percent
 
-                mevuBalance += (3*(fee/4));
+                peepBalance += (3*(fee/4));
                 rewards.subEth(user, payoutValue);
                 payoutValue -= fee;
                 lotteryBalance += (fee/8);
 
                 // TODO check who we are transferring it tot
-                transferEthFromMevu(user, payoutValue);
+                transferEthFromPPC(user, payoutValue);
             }
             wagers.setLocked(wagerId);
         }
@@ -427,25 +423,25 @@ contract Mevu is Ownable {
         }
     }
 
-    /** @dev Pays out the monthly lottery balance to a random  and sends the mevuWallet its accrued balance.
+    /** @dev Pays out the monthly lottery balance to a random  and sends the peepWallet its accrued balance.
     */
     function payoutFunds(address toPay) private {
         // can use this function to do transfers
-        if (mvuToken.balanceOf(toPay) > 0) {
+        if (peepCoins.balanceOf(toPay) > 0) {
             uint thisWin = lotteryBalance;
             lotteryBalance = 0;
             toPay.transfer(thisWin);
         } else {
 
         }
-        assert(this.balance - mevuBalance > playerFunds);
-        mevuWallet.transfer(mevuBalance);
-        mevuBalance = 0;
+        assert(this.balance - peepBalance > playerFunds);
+        peepWallet.transfer(peepBalance);
+        peepBalance = 0;
     }
 
     function pauseContract() public onlyOwner { contractPaused = true; }
 
-    function addMevuBalance (uint amount) public onlyAuth { mevuBalance += amount; }
+    function addPPCBalance (uint amount) public onlyAuth { peepBalance += amount; }
 
     function addToPlayerFunds (uint amount) public onlyAuth { playerFunds += amount; }
 
@@ -453,11 +449,11 @@ contract Mevu is Ownable {
 
     function getContractPaused() public constant returns (bool) { return contractPaused; }
 
-    function transferTokensToMevu (address player, uint mvuStake) internal { mvuToken.transferFrom(player, this, mvuStake); }
+    function transferTokensToPPC (address player, uint peepStake) internal { peepCoins.transferFrom(player, this, peepStake); }
 
-    function transferTokensFromMevu (address player, uint mvuStake) internal { mvuToken.transfer(player, mvuStake); }
+    function transferTokensFromPPC (address player, uint peepStake) internal { peepCoins.transfer(player, peepStake); }
 
-    function transferEthFromMevu (address recipient, uint amount) internal { recipient.transfer(amount); }
+    function transferEthFromPPC (address recipient, uint amount) internal { recipient.transfer(amount); }
 
     function addMonth () internal { newMonth += monthSeconds; }
 
