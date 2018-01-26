@@ -3,114 +3,9 @@ pragma solidity ^0.4.18;
 
 import "./PeepCoin.sol";
 
-contract WagersController is Ownable {
-    mapping (address => bool) private isAuthorized;
-    PPC ppcoin;
-    Wagers wagers;
-    Events events;
-    Admin admin;
-    Rewards rewards;
-
-    modifier onlyAuth () {
-        require(isAuthorized[msg.sender]);
-        _;
-    }
-
-    modifier requireMinWager() {
-        require (msg.value >= admin.getMinWagerAmount());
-        _;
-    }
-
-    modifier onlyBettor (bytes32 wagerId) {
-        require (msg.sender == wagers.getBettor(wagerId)); // TODO
-        _;
-    }
-
-    modifier checkBalance (uint wagerValue) {
-        require (rewards.getEthBalance(msg.sender) + msg.value >= wagerValue);
-        _;
-    }
-
-    modifier notPaused() {
-        require (!ppcoin.getContractPaused());
-        _;
-    }
-
-    function grantAuthority (address nowAuthorized) public onlyOwner { isAuthorized[nowAuthorized] = true; }
-
-    function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
-
-    function setPPCContract (address thisAddr) external onlyOwner { ppcoin = PPC(thisAddr); }
-
-    function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
-
-    function setRewardsContract (address thisAddr) external onlyOwner { rewards = Rewards(thisAddr); }
-
-    function setAdminContract (address thisAddr) external onlyOwner { admin = Admin(thisAddr); }
-
-    function setEventsContract (address thisAddr) external onlyOwner { events = Events(thisAddr); }
-
-    /** @dev Creates a new Standard wager for a user to take and adds it to the standardWagers mapping.
-      * @param wagerId sha3 hash of the msg.sender concat timestamp.
-      * @param eventId int id for the standard event the wager is based on.
-      */
-    function makeWager(bytes32 wagerId, uint value, bytes32 eventId) public requireMinWager checkBalance(value) notPaused payable {
-
-        wagers.makeWager( wagerId, value, eventId, msg.sender);
-        transferEthToPPC(msg.value);
-        ppcoin.addToPlayerFunds(msg.value);
-        //events.addWager(eventId, wagerId);
-        rewards.addEth(msg.sender, msg.value);
-    }
-
-    function transferEthToPPC (uint amount) internal { ppcoin.transfer(amount); }
-
-}
-
-contract Wagers is Ownable {
-
-    Events events;
-    Rewards rewards;
-    PPC ppcoin;
-
-    struct Wager {
-        bytes32 eventId;
-        uint origValue;
-    }
-
-    mapping (bytes32 => Wager) wagersMap;
-    mapping (address => mapping (bytes32 => bool)) recdRefund;
-    mapping (address => bool) private isAuthorized;
-
-    modifier onlyAuth () {
-        require(isAuthorized[msg.sender]);
-        _;
-    }
-
-    function grantAuthority (address nowAuthorized) external onlyOwner { isAuthorized[nowAuthorized] = true; }
-
-    function removeAuthority (address unauthorized) external onlyOwner { isAuthorized[unauthorized] = false; }
-
-    function makeWager (bytes32 wagerId, uint value, bytes32 eventId, address bettor) external onlyAuth {
-        Wager memory thisWager = Wager (eventId,value);
-        wagersMap[wagerId] = thisWager;
-        // TODO add bettor somewhere
-    }
-
-    function setRefund (address bettor, bytes32 wagerId) external onlyAuth { recdRefund[bettor][wagerId] = true; }
-
-    function getEventId(bytes32 wagerId) external view returns (bytes32) { return wagersMap[wagerId].eventId; }
-
-    function getRefund (address bettor, bytes32 wagerId) external view returns (bool) { return recdRefund[bettor][wagerId]; }
-
-    function getOrigValue (bytes32 id) external view returns (uint) { return wagersMap[id].origValue; }
-}
-
-
 contract Rewards is Ownable {
     mapping (address => bool) private isAuthorized;
     Admin admin;
-    Wagers wagers;
     mapping (address => uint) public ethBalance;
     mapping (address => uint) public peepBalance;
 
@@ -124,8 +19,6 @@ contract Rewards is Ownable {
     function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
 
     function setAdminContract (address thisAddr) external onlyOwner { admin = Admin(thisAddr); }
-
-    function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
 
     function getEthBalance(address user) external view returns (uint) { return ethBalance[user]; }
 
@@ -147,7 +40,6 @@ contract PPC is Ownable {
     address peepWallet;
     Events events;
     Admin admin;
-    Wagers wagers;
     Rewards rewards;
     PeepCoin peepCoins;
 
@@ -163,8 +55,8 @@ contract PPC is Ownable {
         _;
     }
 
-    modifier onlyBettor (bytes32 wagerId) {
-        require (msg.sender == wagers.getBettor(wagerId)); // TODO
+    modifier onlyBettor (bytes32 eventId) {
+        require (msg.sender == events.isBettor(msg.sender)); // TODO
         _;
     }
 
@@ -179,7 +71,7 @@ contract PPC is Ownable {
     }
 
     function () payable public {
-        if (msg.sender != address(wagers)) {
+        if (msg.sender != address(events)) {
             peepBalance += msg.value;
         }
     }
@@ -199,8 +91,6 @@ contract PPC is Ownable {
     function setRewardsContract   (address thisAddr) external onlyOwner { rewards = Rewards(thisAddr); }
 
     function setAdminContract (address thisAddr) external onlyOwner { admin = Admin(thisAddr); }
-
-    function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
 
     function setPeepCoinContract (address thisAddr) external onlyOwner { peepCoins = PeepCoin(thisAddr); }
 
@@ -232,24 +122,6 @@ contract PPC is Ownable {
 
     }
 
-    /** @dev Pays out the wager if both the maker and taker have agreed
-       * @param wagerId bytes32 id for the wager.
-       */
-    function payout(bytes32 wagerId, address user) internal {
-        uint origVal =  wagers.getOrigValue(wagerId);
-        bool tie = false;
-        if (tie) { //Tie
-            msg.sender.transfer(origVal);
-
-        } else {
-            uint payoutValue = 90; // TODO get amount
-            rewards.subEth(user, payoutValue);
-
-            // TODO check who we are transferring it tot
-            transferEthFromPPC(user, payoutValue);
-        }
-    }
-
     function pauseContract() public onlyOwner { contractPaused = true; }
 
     function addPPCBalance (uint amount) public onlyAuth { peepBalance += amount; }
@@ -274,7 +146,6 @@ contract Events is Ownable {
     uint public eventsCount;
     bytes32[] public activeEvents;
 
-    Wagers wagers;
     Admin admin;
 
     struct StandardWagerEvent {
@@ -283,8 +154,8 @@ contract Events is Ownable {
         uint numWagers;
         uint totalAmountBet;
         uint activeEventIndex;
-        bytes32[] wagers;
         bool cancelled;
+        address[] bettors;
     }
 
     mapping (bytes32 => StandardWagerEvent) standardEvents;
@@ -302,8 +173,6 @@ contract Events is Ownable {
 
     function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
 
-    function setWagersContract (address thisAddr) external onlyOwner { wagers = Wagers(thisAddr); }
-
     function setAdminContract (address thisAddr) external onlyAuth { admin = Admin(thisAddr);    }
 
     function Events () public {
@@ -317,7 +186,7 @@ contract Events is Ownable {
       */
     function makeStandardEvent(bytes32 id, bytes32 name, uint startTime) external onlyAuth {
         StandardWagerEvent memory thisEvent;
-        thisEvent = StandardWagerEvent( name, startTime, 0, 0, activeEvents.length, emptyBytes32Array, false);
+        thisEvent = StandardWagerEvent( name, startTime, 0, 0, activeEvents.length, false, emptyBytes32Array);
         standardEvents[id] = thisEvent;
         eventsCount++;
         activeEvents.push(id);
@@ -352,7 +221,7 @@ contract Events is Ownable {
         standardEvents[eventId].totalAmountBet += value;
     }
 
-    // TODO allow initialize, buy and sell from Event maybe without wager
+    // TODO allow initialize, buy and sell from Event, keep traack of who is doing it
 
     function getActiveEventId (uint i) external view returns (bytes32) { return activeEvents[i]; }
 
@@ -365,5 +234,7 @@ contract Events is Ownable {
     function getCancelled(bytes32 id) external view returns (bool) { return standardEvents[id].cancelled; }
 
     function getStart (bytes32 id) public view returns (uint) { return standardEvents[id].startTime; }
+
+    function isBettor (bytes32 id, address user ) public view returns (bool) { return standardEvents[id].bettors[user]; }
 
 }
