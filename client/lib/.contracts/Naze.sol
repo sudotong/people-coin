@@ -63,20 +63,6 @@ contract WagersController is Ownable {
         rewards.addEth(msg.sender, msg.value);
     }
 
-    /** @dev Takes a listed wager for a user -- adds address to StandardWager struct.
-     * @param id sha3 hash of the msg.sender concat timestamp.
-     */
-    function takeWager (bytes32 id) public notPaused payable {
-        uint expectedValue = wagers.getOrigValue(id);
-        require (rewards.getEthBalance(msg.sender) + msg.value >= expectedValue);
-        transferEthToPPC(msg.value);
-        ppcoin.addToPlayerFunds(msg.value);
-        rewards.addEth(msg.sender, msg.value);
-        // TODO better winnign value
-        events.addWager(wagers.getEventId(id), 90);
-
-    }
-
     function transferEthToPPC (uint amount) internal { ppcoin.transfer(amount); }
 
 }
@@ -156,10 +142,6 @@ contract Rewards is Ownable {
 }
 
 
-
-
-
-
 contract PPC is Ownable {
 
     address peepWallet;
@@ -173,7 +155,6 @@ contract PPC is Ownable {
     uint  peepBalance = 0;
     uint public playerFunds = 0;
 
-    mapping (bytes32 => bool) validIds;
     mapping (address => bool) abandoned;
     mapping (address => bool) private isAuthorized;
 
@@ -251,19 +232,6 @@ contract PPC is Ownable {
 
     }
 
-
-    /** @dev Settles the wager if both the maker and taker have voted, pays out if they agree
-      * @param wagerId bytes32 id for the wager.
-      */
-//    function settle(bytes32 wagerId) internal {
-//        address maker = wagers.getMaker(wagerId);
-//        address taker = wagers.getMaker(wagerId);
-//        uint origValue = wagers.getOrigValue(wagerId);
-//        rewards.addEth(maker, origValue);
-//        rewards.subEth(taker, origValue);
-//        payout(wagerId, maker); // TODO wrong payout atm
-//    }
-
     /** @dev Pays out the wager if both the maker and taker have agreed
        * @param wagerId bytes32 id for the wager.
        */
@@ -281,16 +249,6 @@ contract PPC is Ownable {
             transferEthFromPPC(user, payoutValue);
         }
     }
-
-
-
-    // Players should call this when an event has been cancelled. Cancelling not supported atm
-//    function playerRefund (bytes32 wagerId) external onlyBettor(wagerId) {
-//        require (events.getCancelled(wagers.getEventId(wagerId)));
-//        require (!wagers.getRefund(msg.sender, wagerId));
-//        wagers.setRefund(msg.sender, wagerId);
-//        rewards.addEth(msg.sender, ethStake);
-//    }
 
     function pauseContract() public onlyOwner { contractPaused = true; }
 
@@ -318,7 +276,6 @@ contract Events is Ownable {
 
     Wagers wagers;
     Admin admin;
-
 
     struct StandardWagerEvent {
         bytes32 name;
