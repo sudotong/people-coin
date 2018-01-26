@@ -28,6 +28,8 @@ Run `meteor npm install`
 
 TODO write tests with truffle https://github.com/blmalone/eth-smart-contracts
 
+Install testrpc: https://github.com/ethereumjs/testrpc
+npm install -g ethereumjs-testrpc
 
 ### Break down into end to end tests
 
