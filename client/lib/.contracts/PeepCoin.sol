@@ -27,38 +27,3 @@ contract PeepCoin is StandardToken {
     }
 
 }
-
-contract Admin is Ownable {
-    mapping (address => bool) private isAuthorized;
-    uint minWagerAmount = 10;
-    uint callbackInterval = 15;
-    uint callbackGasLimit = 600000;
-
-    modifier onlyAuth () {
-        require(isAuthorized[msg.sender]);
-        _;
-    }
-
-    function grantAuthority (address nowAuthorized) public onlyOwner { isAuthorized[nowAuthorized] = true; }
-
-    function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
-
-    function setCallbackGasLimit (uint newLimit) external onlyOwner { callbackGasLimit = newLimit; }
-
-    /** @dev Sets a new number for the interval in between callback functions.
-      * @param newInterval The new interval between oraclize callbacks.
-      */
-    function setCallbackInterval(uint newInterval) external onlyOwner { callbackInterval = newInterval; }
-
-    /** @dev Updates the minimum amount of ETH required to make a wager.
-      * @param minWager The new required minimum amount of ETH to make a wager.
-      */
-    function setMinWagerAmount(uint256 minWager) external onlyOwner { minWagerAmount = minWager; }
-
-    function getCallbackInterval() external view returns (uint) { return callbackInterval; }
-
-    function getMinWagerAmount() external view returns (uint) { return minWagerAmount; }
-
-    function getCallbackGasLimit() external view returns (uint) { return callbackGasLimit; }
-
-}
