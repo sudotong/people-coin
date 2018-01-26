@@ -1,52 +1,30 @@
 pragma solidity ^0.4.18;
 
-import "github.com/OpenZeppelin/zeppelin-solidity/contracts/token/ERC20/MintableToken.sol";
+import "github.com/OpenZeppelin/zeppelin-solidity/contracts/token/ERC20/StandardToken.sol";
+
 
 /**
- * @title PeepCoin
- * @dev Mintable ERC20 Token which also controls a one-time bet contract, token transfers locked until sale ends.
- * Based on code by TokenMarketNet: https://github.com/TokenMarketNet/ico/blob/master/contracts/MintableToken.sol
+ * @title SimpleToken
+ * @dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.
+ * Note they can later distribute these tokens as they wish using `transfer` and other
+ * `StandardToken` functions.
  */
+contract PeepCoin is StandardToken {
 
+    string public constant name = "PeepCoin"; // solium-disable-line uppercase
+    string public constant symbol = "PPC"; // solium-disable-line uppercase
+    uint8 public constant decimals = 18; // solium-disable-line uppercase
 
-contract PeepCoin is MintableToken {
-    event TokensMade(address indexed to, uint amount);
-    uint saleEnd = 1519022651; // TODO: Update with actual date
-    uint betsEnd = 1519000651;  // TODO: Update with actual date
-    uint tokenCap = 100000000; // TODO: Update with actual cap
+    uint256 public constant INITIAL_SUPPLY = 10000 * (10 ** uint256(decimals));
 
-    mapping (address => uint) private balances;
-
-    modifier saleOver () {
-        require (now > saleEnd);
-        _;
+    /**
+     * @dev Constructor that gives msg.sender all of existing tokens.
+     */
+    function PeepCoin() public {
+        totalSupply_ = INITIAL_SUPPLY;
+        balances[msg.sender] = INITIAL_SUPPLY;
+        Transfer(0x0, msg.sender, INITIAL_SUPPLY);
     }
-
-
-    modifier betsAllowed () {
-        require (now < betsEnd);
-        _;
-    }
-
-    modifier underCap (uint tokens) {
-        require(totalSupply() + tokens < tokenCap);
-        _;
-    }
-
-    function PeepCoin (uint initFounderSupply) public {
-        balances[msg.sender] = initFounderSupply;
-        TokensMade(msg.sender, initFounderSupply);
-        mint(msg.sender, initFounderSupply);
-    }
-
-    function transfer (address _to, uint _value) saleOver public returns (bool) {
-        super.transfer(_to, _value);
-    }
-
-    function mint(address _to, uint _amount) onlyOwner canMint underCap(_amount) public returns (bool) {
-        super.mint(_to, _amount);
-    }
-
 
 }
 
@@ -54,10 +32,7 @@ contract Admin is Ownable {
     mapping (address => bool) private isAuthorized;
     uint minWagerAmount = 10;
     uint callbackInterval = 15;
-    uint minOracleStake = 1;
     uint callbackGasLimit = 600000;
-    int oracleRepPenalty = 25;
-    mapping (bytes32 => uint) minOracleNum;
 
     modifier onlyAuth () {
         require(isAuthorized[msg.sender]);
@@ -67,12 +42,6 @@ contract Admin is Ownable {
     function grantAuthority (address nowAuthorized) public onlyOwner { isAuthorized[nowAuthorized] = true; }
 
     function removeAuthority (address unauthorized) public onlyOwner { isAuthorized[unauthorized] = false; }
-
-    function setMinOracleStake (uint newMin) external onlyOwner { minOracleStake = newMin; }
-
-    function setMinOracleNum (bytes32 eventId, uint min) external onlyAuth { minOracleNum[eventId] = min; }
-
-    function setOracleRepPenalty (int penalty) external onlyOwner { oracleRepPenalty = penalty; }
 
     function setCallbackGasLimit (uint newLimit) external onlyOwner { callbackGasLimit = newLimit; }
 
@@ -90,17 +59,6 @@ contract Admin is Ownable {
 
     function getMinWagerAmount() external view returns (uint) { return minWagerAmount; }
 
-    function getMinOracleStake () external view returns (uint) {
-        return minOracleStake;
-    }
-
-    function getCallbackGasLimit() external view returns (uint) {
-        return callbackGasLimit;
-    }
-
-    function getMinOracleNum (bytes32 eventId) external view returns (uint) {
-        return minOracleNum[eventId];
-    }
-
+    function getCallbackGasLimit() external view returns (uint) { return callbackGasLimit; }
 
 }
