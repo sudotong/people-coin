@@ -56,7 +56,7 @@ contract PPC is Ownable {
     }
 
     modifier onlyBettor (bytes32 eventId) {
-        require (msg.sender == events.isBettor(msg.sender)); // TODO
+        require (events.isBettor(eventId, msg.sender)); // TODO
         _;
     }
 
@@ -78,8 +78,8 @@ contract PPC is Ownable {
 
     // Constructor
     function PPC () payable public {
-        setPPCWallet(msg.sender);
-        setPeepCoinContract(0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb); //TODO: Update with actual token address
+        peepCoins = PeepCoin(msg.sender);
+        peepWallet = 0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb; //TODO: Update with actual token address
     }
 
     function grantAuthority (address nowAuthorized) public onlyOwner { isAuthorized[nowAuthorized] = true; }
@@ -100,13 +100,13 @@ contract PPC is Ownable {
         require(!abandoned[msg.sender]);
         abandoned[msg.sender] = true;
         uint ethBalance =  rewards.getEthBalance(msg.sender);
-        uint peepBalance = rewards.getPeepBalance(msg.sender);
+        uint ppeepBalance = rewards.getPeepBalance(msg.sender);
         playerFunds -= ethBalance;
         if (ethBalance > 0) {
             msg.sender.transfer(ethBalance);
         }
-        if (peepBalance > 0) {
-            peepCoins.transfer(msg.sender, peepBalance);
+        if (ppeepBalance > 0) {
+            peepCoins.transfer(msg.sender, ppeepBalance);
         }
     }
 
@@ -186,7 +186,7 @@ contract Events is Ownable {
       */
     function makeStandardEvent(bytes32 id, bytes32 name, uint startTime) external onlyAuth {
         StandardWagerEvent memory thisEvent;
-        thisEvent = StandardWagerEvent( name, startTime, 0, 0, activeEvents.length, false, emptyBytes32Array);
+        thisEvent = StandardWagerEvent( name, startTime, 0, 0, activeEvents.length, false, emptyAddrArray);
         standardEvents[id] = thisEvent;
         eventsCount++;
         activeEvents.push(id);
@@ -212,8 +212,10 @@ contract Events is Ownable {
     }
 
     function removeWager (bytes32 eventId, uint value) external onlyAuth {
-        standardEvents[eventId].numWagers --;
-        standardEvents[eventId].totalAmountBet -= value;
+        if (isBettor(eventId, msg.sender)){
+            standardEvents[eventId].numWagers --;
+            standardEvents[eventId].totalAmountBet -= value;
+        }
     }
 
     function addWager(bytes32 eventId, uint value) external onlyAuth {
@@ -235,6 +237,6 @@ contract Events is Ownable {
 
     function getStart (bytes32 id) public view returns (uint) { return standardEvents[id].startTime; }
 
-    function isBettor (bytes32 id, address user ) public view returns (bool) { return standardEvents[id].bettors[user]; }
+    function isBettor (bytes32 id, address user ) public view returns (bool) {  standardEvents[id];user;return false;}// standardEvents[id].bettors[user]; }
 
 }
