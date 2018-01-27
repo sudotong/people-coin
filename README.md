@@ -31,6 +31,19 @@ TODO write tests with truffle https://github.com/blmalone/eth-smart-contracts
 Install testrpc: https://github.com/ethereumjs/testrpc
 npm install -g ethereumjs-testrpc
 
+
+https://medium.com/@gus_tavo_guim/deploying-a-smart-contract-the-hard-way-8aae778d4f2a
+
+https://github.com/rsksmart/rskj/wiki/Testing-RSK-Smart-Contracts-using-Truffle
+
+Tab2: testrpc
+```
+$ truffle compile
+$ truffle migrate
+```
+Tab3: truffle console
+
+
 ### Break down into end to end tests
 
 Explain what these tests test and why
