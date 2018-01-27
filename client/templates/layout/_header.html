@@ -1,50 +1,28 @@
 <template name="layout_header">
-	<nav class="navbar navbar-default">
-		<div class="container-fluid">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/">
-                    {{{i18n 'dapp.app.title'}}}
-                </a>
-			</div>
-
-            <ul class="nav navbar-nav navbar-left">
-                <li>
-                    <a class="what-is-this" href="/guide">
-                        {{{i18n 'dapp.app.what'}}}
-                    </a>
-                </li>
+    <nav class="navbar navbar-default">
+        <div class="nav-wrapper">
+            <a href="#!" class="brand-logo center">{{{i18n 'dapp.app.title'}}}</a>
+            <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons" style="color:#4a90e2">menu</i></a>
+            <ul class="left hide-on-med-and-down">
+                <li><a href="{{ pathFor route='list.show' data=getTrending }}">{{{i18n 'dapp.app.buttons.trending'}}}</a></li>
+                <li><a href="{{ pathFor route='list.show' data=getTop }}">{{{i18n 'dapp.app.buttons.top'}}}</a></li>
+                <li><a href="{{ pathFor route='list.show' data=getNew }}">{{{i18n 'dapp.app.buttons.new'}}}</a></li>
             </ul>
-
-            <ul class="nav navbar-nav navbar-middle">
-                <li>
-                    <a href="{{ pathFor route='list.show' data=getTrending }}">
-                        {{{i18n 'dapp.app.buttons.trending'}}}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ pathFor route='list.show' data=getTop }}">
-                        {{{i18n 'dapp.app.buttons.top'}}}
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ pathFor route='list.show' data=getNew }}">
-                        {{{i18n 'dapp.app.buttons.new'}}}
-                    </a>
-                </li>
+            <!--<ul class="hide-on-med-and-down">-->
+            <!--</ul>-->
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{ pathFor 'search' }}">{{{i18n 'dapp.app.buttons.search'}}}</a></li>
+                <li><a href="{{ pathFor 'account' }}">{{{i18n 'dapp.app.buttons.account'}}}</a></li>
             </ul>
+            <ul class="side-nav" id="mobile-demo">
+                <li><a class="what-is-this" href="/guide"><i class="material-icons left">info_outline</i>{{{i18n 'dapp.app.what'}}}</a></li>
+                <li><a href="{{ pathFor route='list.show' data=getTrending }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.trending'}}}</a></li>
+                <li><a href="{{ pathFor route='list.show' data=getTop }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.top'}}}</a></li>
+                <li><a href="{{ pathFor route='list.show' data=getNew }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.new'}}}</a></li>
+                <li><a href="{{ pathFor 'search' }}"><i class="material-icons left">search</i>{{{i18n 'dapp.app.buttons.search'}}}</a></li>
+                <li><a href="{{ pathFor 'account' }}"><i class="material-icons left">account_circle</i>{{{i18n 'dapp.app.buttons.account'}}}</a></li>
+            </ul>
+        </div>
+    </nav>
 
-			<ul class="nav navbar-nav navbar-right">
-				<li>
-                    <a href="{{ pathFor 'search' }}">
-                        {{{i18n 'dapp.app.buttons.search'}}}
-                    </a>
-                </li>
-				<li>
-                    <a href="{{ pathFor 'account' }}">
-                        {{{i18n 'dapp.app.buttons.account'}}}
-                    </a>
-                </li>
-			</ul>
-		</div>
-	</nav>
 </template>

@@ -37,6 +37,7 @@ Formats a timestamp to any format given.
 
 Template.registerHelper('formatTime', Helpers.formatTime);
 
+Template.registerHelper('concat', Helpers.concat);
 
 /**
 Formats a number.
