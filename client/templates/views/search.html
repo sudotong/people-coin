@@ -1,4 +1,10 @@
 <template name="views_search">
+    {{#unless peep}}
+        <div class="row">
+            <h1 class="peepcoin_h1">PeopleCoin</h1>
+            <h2 class="peepcoin_h2">Bet on the people you know today, that will be great tomorrow.</h2>
+        </div>
+    {{/unless}}
     <div class="row">
         <div class="col s2"></div>
         <div class="col s8">
@@ -7,59 +13,27 @@
         <div class="col s2"></div>
     </div>
     {{#if peep}}
-        <div class="row">
-            <div class="col s2"></div>
-            <div class="col s2">
-                Last traded on {{formatTime peep.lastTrade "MMM Do"}}. So popular!
-                <!--{{> components_history}}-->
-                {{> components_peepChart peep=peep}}
-                <p class="flow-text">{{peep.bio}}</p>
-                <br />
-                <a class="waves-effect waves-light blue btn small">Share</a>
-            </div>
-            <div class="col s1"></div>
-            <div class="col s2">
-                <div class="row">
-                <div class="col s12 card small" style="padding: 0;">
-                    <div class="card-image">
-                        <img src={{peep.imageBig}}>
-                        <span class="card-title">{{peep.screen_name}}</span>
-                        <a class="btn-floating halfway-fab waves-effect waves-light red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</a>
-                        <a style="right: 88px;" class="btn-floating halfway-fab waves-effect waves-light green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲</a>
-
-                    </div>
-                    <div class="card-content">
-                        <p>{{peep.numTrades}} PeepCoin</p>
-                    </div>
-
-                    <h3>Your current stake: <strong>900 PeepCoin</strong></h3>
-                </div>
-                </div>
-            </div>
-            <div class="col s1"></div>
-            <div class="col s4">{{> components_transaction}}</div>
-            <div class="col s2"></div>
-
-        </div>
-        <div class="row">
-             <div class="col s2"></div>
-             <div class="col s4">
-             </div>
-             <div class="col s4">
-
-             </div>
-             <div class="col s2"></div>
-        </div>
+        {{> components_peep peep=peep}}
     {{else}}
         <div class="row">
-            <div class="col s2"></div>
-            <div class="col s4">
-                Try searching for your favorite celebrity
-            </div>
-            <div class="col s4">
-                Or your most promising friend
-            </div>
-            <div class="col s2"></div>
+            {{#if peeps}}
+                <div class="col s1"></div>
+                {{#each pp in peeps}}
+                    <div class="col s3">
+                        {{> components_peepSmall peep=pp}}
+                    </div>
+                {{/each}}
+                <div class="col s1"></div>
+            {{else}}
+                <div class="col s2"></div>
+                <div class="col s4">
+                    Try searching for your favorite celebrity
+                </div>
+                <div class="col s4">
+                    Or your most promising friend
+                </div>
+                <div class="col s2"></div>
+            {{/if}}
         </div>
     {{/if}}
 </template>

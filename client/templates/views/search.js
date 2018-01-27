@@ -23,6 +23,9 @@ Template['views_search'].helpers({
     },
     'peep': function(){
         return this.peep;
+    },
+    'peeps': function(){
+        return this.peeps;
     }
 });
 

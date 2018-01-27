@@ -32,7 +32,7 @@ Meteor.startup(function() {
     } else {
         web3 = new Web3(web3.currentProvider || provider);
     }
-    // if(!web3.currentProvider) web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+    web3.setProvider(provider);
 
     // Setup EthAccounts
     EthAccounts.init();

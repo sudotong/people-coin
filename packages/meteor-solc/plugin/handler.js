@@ -47,7 +47,9 @@ class SolidityCompiler extends CachingCompiler {
 				jsContent += "  && typeof Web3 !== 'undefined')";
 				jsContent += "    web3 = new Web3();";
 
-				jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(JSON.stringify(results.contracts[contractName].interface, null, '\t')).trim() + ')' + '; \n\n';
+				var preparse = JSON.stringify(results.contracts[contractName].interface, null, '\t');
+				console.log(preparse);
+				jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(preparse).trim() + ')' + '; \n\n';
 
 				jsContent += "" + name + ".bytecode = '" + results.contracts[contractName].bytecode + "'; \n\n";
 			}

@@ -1,7 +1,8 @@
 {
 	"dapp": {
 		"app": {
-			"title": "PeopleCoin"
+			"title": "PeopleCoin",
+			"what": "What is this?"
 			, "buttons": {
 				"search": "Search"
 				, "account": "My Account"
@@ -9,6 +10,7 @@
 				, "top": "Top"
 				, "new": "New"
 				, "faq": "Frequently Asked Questions"
+				, "guide": "How it works"
 			}
 			, "headers": {
 				"identicon": "Identicon"
@@ -76,6 +78,10 @@
 		}, "faq": {
 			"title": "FAQ"
 			, "defaultName": "Frequently Asked Questions"
+		}, "guide": {
+			"title": "Guide"
+			, "defaultName": "How It Works"
 		}
+
 	}
 }

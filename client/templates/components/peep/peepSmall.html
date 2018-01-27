@@ -1,0 +1,22 @@
+<template name="components_peepSmall">
+    {{#if peep}}
+    <div class="row" style="margin: 5px">
+        <div class="col s12" >
+            <div class="row">
+                <div class="col s12 card small" style="padding: 0;">
+                    <div class="card-image">
+                        <img src={{peep.imageBig}}>
+                            <span class="card-title"><a href="/search/{{friend.screen_name}}">{{friend.screen_name}}</a></span>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</a>
+                            <a style="right: 88px;" class="btn-floating halfway-fab waves-effect waves-light green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲</a>
+
+                    </div>
+                    <div class="card-content">
+                        <p>{{peep.numTrades}} PeepCoin</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+</template>
