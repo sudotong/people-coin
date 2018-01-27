@@ -49,14 +49,44 @@ The receive route, showing the wallet overview
 */
 
 // Default route
-Router.route('/', {
-    template: 'views_search',
+Router.route('/', function(){
+    defaultView(this);
+    let allPeeps = TwitterFriends.find({}).fetch();
+    let peeps = [];
+    let added = [];
+    let iterated = 6;
+    while (peeps.length < 3 && --iterated >0) {
+        let randPeep = allPeeps[Math.floor(Math.random()*allPeeps.length)];
+        if (randPeep && added.indexOf(randPeep._id) == -1){
+            peeps.push(randPeep);
+            added.push(randPeep._id);
+        }
+    }
+    this.render('views_search', {
+        data: {peeps}
+    });
+},{
     name: 'home'
 });
 
 // Route for search page
-Router.route('/search', {
-    template: 'views_search',
+Router.route('/search', function(){
+    defaultView(this);
+    let allPeeps = TwitterFriends.find({}).fetch();
+    let peeps = [];
+    let added = [];
+    let iterated = 6;
+    while (peeps.length < 3 && --iterated >0) {
+        let randPeep = allPeeps[Math.floor(Math.random()*allPeeps.length)];
+        if (randPeep && added.indexOf(randPeep._id) == -1){
+            peeps.push(randPeep);
+            added.push(randPeep._id);
+        }
+    }
+    this.render('views_search', {
+        data: {peeps}
+    });
+}, {
     name: 'search'
 });
 
@@ -93,11 +123,12 @@ Router.route('/guide', {
 Router.route('/search/:_id', function(){
     defaultView(this);
     let peep = TwitterFriends.findOne({screen_name: this.params._id});
+    let allPeeps = TwitterFriends.find({}).fetch();
     let peeps = [];
     let added = [];
     let iterated = 6;
     while (peeps.length < 3 && --iterated >0) {
-        let randPeep = randomFromCollection(TwitterFriends);
+        let randPeep = allPeeps[Math.floor(Math.random()*allPeeps.length)];
         if (randPeep && added.indexOf(randPeep._id) == -1){
             peeps.push(randPeep);
             added.push(randPeep._id);
@@ -123,17 +154,4 @@ function defaultView(self){
     self.layout('layout_main');
     self.render('layout_header', {to: 'header'});
     self.render('layout_footer', {to: 'footer'});
-}
-
-function randomInRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-
-function randomFromCollection(C) {
-    return function() {
-        let c = C.find().fetch();
-        let i = randomInRange(0, c.count());
-        return c[i]
-    }
 }

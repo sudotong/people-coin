@@ -17,11 +17,13 @@
     {{else}}
         <div class="row">
             {{#if peeps}}
+                <div class="col s1"></div>
                 {{#each pp in peeps}}
                     <div class="col s3">
-                        {{> components_peep peep=pp sample=true}}
+                        {{> components_peepSmall peep=pp}}
                     </div>
                 {{/each}}
+                <div class="col s1"></div>
             {{else}}
                 <div class="col s2"></div>
                 <div class="col s4">
