@@ -85,12 +85,27 @@ Router.route('/list/:_id', function(){
     name: 'list.show',
 });
 
+Router.route('/guide', {
+    template: 'views_guide',
+    name: 'guide'
+});
+
 Router.route('/search/:_id', function(){
     defaultView(this);
     let peep = TwitterFriends.findOne({screen_name: this.params._id});
+    let peeps = [];
+    let added = [];
+    let iterated = 6;
+    while (peeps.length < 3 && --iterated >0) {
+        let randPeep = randomFromCollection(TwitterFriends);
+        if (randPeep && added.indexOf(randPeep._id) == -1){
+            peeps.push(randPeep);
+            added.push(randPeep._id);
+        }
+    }
     if (peep){
         this.render('views_search', {
-            data: {peep}
+            data: {peep, peeps}
         });
     } else {
         this.render('layout_notFound');
@@ -108,4 +123,17 @@ function defaultView(self){
     self.layout('layout_main');
     self.render('layout_header', {to: 'header'});
     self.render('layout_footer', {to: 'footer'});
+}
+
+function randomInRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+function randomFromCollection(C) {
+    return function() {
+        let c = C.find().fetch();
+        let i = randomInRange(0, c.count());
+        return c[i]
+    }
 }

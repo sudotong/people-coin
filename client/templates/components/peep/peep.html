@@ -1,0 +1,39 @@
+<template name="components_peep">
+    {{#if peep}}
+        <div class="row">
+            {{#unless sample}}
+                <div class="col s2"></div>
+                <div class="col s2">
+                    Last traded on {{formatTime peep.lastTrade "MMM Do"}}.
+                    {{> components_peepChart peep=peep}}
+                    <p class="flow-text">{{peep.bio}}</p>
+                    <br />
+                    <a class="waves-effect waves-light blue btn small">Share</a>
+                </div>
+            {{/unless}}
+            <div class="col s1"></div>
+            <div class="col s2">
+                <div class="row">
+                    <div class="col s12 card small" style="padding: 0;">
+                        <div class="card-image">
+                            <img src={{peep.imageBig}}>
+                            <span class="card-title">{{peep.screen_name}}</span>
+                            <a class="btn-floating halfway-fab waves-effect waves-light red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</a>
+                            <a style="right: 88px;" class="btn-floating halfway-fab waves-effect waves-light green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲</a>
+
+                        </div>
+                        <div class="card-content">
+                            <p>{{peep.numTrades}} PeepCoin</p>
+                        </div>
+
+                        <h3>Your current stake: <strong>900 PeepCoin</strong></h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col s1"></div>
+            <div class="col s4">{{> components_transaction}}</div>
+            <div class="col s2"></div>
+
+        </div>
+    {{/if}}
+</template>

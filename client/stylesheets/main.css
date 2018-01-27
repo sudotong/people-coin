@@ -29,3 +29,20 @@
 .web3_address{
     pointer-events:none;
 }
+
+.peepcoin_h1{
+    font-family: 'Poppins', sans-serif;
+    text-transform: none;
+    color: #ffab40;
+    font-size: 60px;
+    font-weight: 700;
+}
+
+.peepcoin_h2{
+    font-family: 'Poppins', sans-serif;
+    text-transform: none;
+    background: none;
+    color:black;
+    font-size: 30px;
+    font-weight: 500;
+}
