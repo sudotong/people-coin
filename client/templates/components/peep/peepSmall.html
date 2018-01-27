@@ -1,20 +1,14 @@
 <template name="components_peepSmall">
     {{#if peep}}
     <div class="row" style="margin: 5px">
-        <div class="col s12" >
-            <div class="row">
-                <div class="col s12 card small" style="padding: 0;">
-                    <div class="card-image">
-                        <img src={{peep.imageBig}}>
-                            <span class="card-title"><a href="/search/{{peep.screen_name}}">{{peep.screen_name}}</a></span>
-                            <a class="btn-floating halfway-fab waves-effect waves-light red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</a>
-                            <a style="right: 88px;" class="btn-floating halfway-fab waves-effect waves-light green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲</a>
-
-                    </div>
-                    <div class="card-content">
-                        <p>{{peep.numTrades}} PeepCoin</p>
-                    </div>
-                </div>
+        <div class="col s12 card small" style="padding: 0;">
+            <div class="card-image">
+                <div class="peep-image" style={{concat "background-image: url(" peep.imageBig ")"}}></div>
+                <span class="card-title"><a href="/search/{{peep.screen_name}}">{{peep.screen_name}}</a></span>
+                {{> peep_buttons}}
+            </div>
+            <div class="card-content">
+                <p>{{peep.numTrades}} PeepCoin</p>
             </div>
         </div>
     </div>

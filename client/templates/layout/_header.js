@@ -1,6 +1,10 @@
 /**
  * Created by sudot on 1/6/2018.
  */
+Template['layout_header'].onRendered(() => {
+    $(".button-collapse").sideNav();
+});
+
 Template['layout_header'].helpers({
     'getTop': function(){
         return {_id: "top"};

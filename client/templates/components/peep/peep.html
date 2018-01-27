@@ -15,10 +15,9 @@
                 <div class="row">
                     <div class="col s12 card small" style="padding: 0;">
                         <div class="card-image">
-                            <img src={{peep.imageBig}}>
+                            <div class="peep-image" style={{concat "background-image: url(" peep.imageBig ")"}}></div>
                             <span class="card-title">{{peep.screen_name}}</span>
-                            <a class="btn-floating halfway-fab waves-effect waves-light red">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▼</a>
-                            <a style="right: 88px;" class="btn-floating halfway-fab waves-effect waves-light green">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;▲</a>
+                            {{> peep_buttons}}
 
                         </div>
                         <div class="card-content">

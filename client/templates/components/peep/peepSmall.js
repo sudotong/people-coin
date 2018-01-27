@@ -1,6 +1,5 @@
 Template['components_peepSmall'].onRendered(function() {
 
-
 });
 
 Template['components_peepSmall'].helpers({

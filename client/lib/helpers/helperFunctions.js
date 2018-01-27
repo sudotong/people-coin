@@ -104,3 +104,7 @@ Helpers.formatTime = function(time, format) { //parameters
     } else
         return '';
 };
+
+Helpers.concat = function () {
+    return Array.prototype.slice.call(arguments, 0, -1).join('');
+};
