@@ -28,8 +28,9 @@ Run `meteor npm install`
 
 TODO write tests with truffle https://github.com/blmalone/eth-smart-contracts
 
-Install testrpc: https://github.com/ethereumjs/testrpc
-npm install -g ethereumjs-testrpc
+Install testrpc: https://github.com/trufflesuite/ganache-cli
+npm install -g ganache-cli
+note: had to use nvm to go to node v6.11.5 or it didnt work
 
 
 https://medium.com/@gus_tavo_guim/deploying-a-smart-contract-the-hard-way-8aae778d4f2a

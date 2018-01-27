@@ -23,7 +23,10 @@ Meteor.startup(function() {
     // set providor, which should be a geth node
     // my RPC settings are: 
     // geth --rpc --rpcaddr="0.0.0.0" --rpccorsdomain="*" --mine --unlock=YOUR_ACCOUNT --verbosity=5 --maxpeers=0 --minerthreads="3"
-    let provider = new web3.providers.HttpProvider("http://localhost:8545");
+
+    let ganache = require("ganache-cli");
+    let isTest = true;
+    let provider = isTest ? ganache.provider() : new web3.providers.HttpProvider("http://localhost:8545");
     if(typeof web3 === 'undefined'){
         web3 = new Web3(provider);
     } else {

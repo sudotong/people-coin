@@ -25,3 +25,7 @@
      color: white;
      text-decoration: none !important;
 }
+
+.web3_address{
+    pointer-events:none;
+}
