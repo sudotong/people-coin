@@ -37,7 +37,7 @@ class SolidityCompiler extends CachingCompiler {
 			jsContent = "";
 
 		for (var contractName in results.contracts) {
-			if (contractName == name) {
+			if ((contractName.startsWith(":") ? contractName.substring(1) : contractName) == name) {
 				jsContent += "var web3 = {};";
 
 				jsContent += "if(typeof window.web3 !== 'undefined')";
@@ -47,9 +47,9 @@ class SolidityCompiler extends CachingCompiler {
 				jsContent += "  && typeof Web3 !== 'undefined')";
 				jsContent += "    web3 = new Web3();";
 
-				jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(JSON.stringify(results.contracts[name].interface, null, '\t')).trim() + ')' + '; \n\n';
+				jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(JSON.stringify(results.contracts[contractName].interface, null, '\t')).trim() + ')' + '; \n\n';
 
-				jsContent += "" + name + ".bytecode = '" + results.contracts[name].bytecode + "'; \n\n";
+				jsContent += "" + name + ".bytecode = '" + results.contracts[contractName].bytecode + "'; \n\n";
 			}
 		}
 

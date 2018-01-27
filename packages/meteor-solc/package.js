@@ -10,8 +10,8 @@ Package.registerBuildPlugin({
     use: [
 		"ecmascript@0.1.0",
 		"isobuild:compiler-plugin@1.0.0",
-		"caching-compiler@1.0.0"//,
-        //"silentcicero:solc-compiler@0.2.1"
+		"caching-compiler@1.0.0",
+        "silentcicero:solc-compiler@0.2.1"
     ],
     sources: [
         "plugin/handler.js",
