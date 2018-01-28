@@ -18,7 +18,8 @@ Note, the Naze object is now housed in client/lib/contracts/Naze.sol
 import source from './NazeSolSource';
 
 // Construct Multiply Contract Object and contract instance
-let contractInstance;
+let ppccontractInstance;
+let eventcontractInstance;
 let mineTimeout;
 
 // When the template is rendered
@@ -59,28 +60,54 @@ Template['components_buyContract'].events({
         web3.eth.defaultAccount = web3.eth.coinbase;
         
         // assemble the tx object w/ default gas value
-        let transactionObject = {
+        let transactionObjectPPC = {
             data: PPC.bytecode,
             gasPrice: web3.eth.gasPrice,
-            gas: 500000,
+            gas: 5000000,
             from: web3.eth.accounts[0]
         };
-        
+
+        let transactionObjectEvent = {
+            data: Events.bytecode,
+            gasPrice: web3.eth.gasPrice,
+            gas: 5000000,
+            from: web3.eth.accounts[0]
+        };
+
         // estimate gas cost then transact new PPC
-        web3.eth.estimateGas(transactionObject, function(err, estimateGas){
+        web3.eth.estimateGas(transactionObjectPPC, function(err, estimateGas){
             // multiply by 10 hack for testing
-            if(!err) transactionObject.gas = estimateGas * 10;
-
-            PPC.new(transactionObject, function(err, contract){
-                clearTimeout(mineTimeout);
+            // if(!err) transactionObjectPPC.gas = estimateGas * 100;
+            console.log('estimate gas for PPC: ', estimateGas);
+            PPC.new(transactionObjectPPC, function(err, ppccontract){
                 if(err) return TemplateVar.set(template, 'state', {isError: true, error: String(err)});
+                web3.eth.estimateGas(transactionObjectEvent, function(err, estimateGas){
+                    // multiply by 10 hack for testing
+                    // if(!err) transactionObjectEvent.gas = estimateGas * 100;
+                    console.log('estimate gas for event: ', estimateGas);
+                    Events.new(transactionObjectEvent, function(err, eventcontract){
+                        clearTimeout(mineTimeout);
+                        if(err) return TemplateVar.set(template, 'state', {isError: true, error: String(err)});
 
-                if(contract.address) {
-                    TemplateVar.set(template, 'state', {isMined: true, address: contract.address, source: source});
-                    contractInstance = contract;
-                } else {
-                    TemplateVar.set(template, 'state', {isError: true, error: String("Unable to submit the transaction")});
-                }
+                        if(ppccontract.address && eventcontract.address) {
+                            TemplateVar.set(template, 'state', {isMined: true, address: ppccontract.address, source: source});
+                            ppccontractInstance = ppccontract;
+                            eventcontractInstance = eventcontract;
+                            ppccontractInstance.initialize.call(template.data.peep.screen_name, template.data.peep.screen_name, new Date().getTime(), function(err, result){
+                                if (err) {
+                                    console.error('Unable to initialize the account '+template.data.peep.screen_name+' for betting :(');
+                                } else {
+                                    console.log('Successfully initialized the account '+template.data.peep.screen_name+ ' for betting!', result);
+                                }
+                            });
+                        } else {
+                            // this gets called many times in callback?
+
+                            // console.log('addr1',ppccontract.address, 'addr2',eventcontract.address);
+                            // TemplateVar.set(template, 'state', {isError: true, error: String("Unable to submit the transaction")});
+                        }
+                    });
+                });
             });
         });
 	},
@@ -94,14 +121,28 @@ Template['components_buyContract'].events({
 
 	"keyup #buyValue": function(event, template){
         // the input value
-		let value = template.find("#buyValue").value;
-        if (contractInstance){
-            // call Naze method `multiply` which should multiply the `value` by 7
-            contractInstance.multiply.call(value, function(err, result){
-                TemplateVar.set(template, 'buyResult', result.toNumber(10));
+        if (event.which == 13) {
+            let value = template.find("#buyValue").value;
+            if (ppccontractInstance){
+                if (eventcontractInstance){
+                    eventcontractInstance.getTradePrice.call(template.data.peep.screen_name, function(err,result){
+                        if(err) TemplateVar.set(template, 'buyResult', String(err));
+                        console.log('the price is ', result, result ? result.toNumber(10) : null);
+                        ppccontractInstance.buy(template.data.peep.screen_name, {value: result ? result.toNumber(10)+10 : 1000000, from: web3.eth.accounts[0]},function(err, result){
+                            // this is the amount bought
 
-                if(err) TemplateVar.set(template, 'buyResult', String(err));
-            });
+                            console.log('the result of .buy() is ', result, result ? result.toNumber(10) : null);
+                            TemplateVar.set(template, 'buyResult', result ? result.toNumber(10) : 'Unable to get buy');
+
+                            if(err) TemplateVar.set(template, 'buyResult', String(err));
+                        });
+                    })
+                } else {
+                    console.error('unable to get the Event contract');
+                }
+            } else {
+                console.error('unable to get the PPC contract');
+            }
         }
 
 	},
