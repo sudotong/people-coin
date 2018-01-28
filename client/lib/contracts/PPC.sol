@@ -142,15 +142,16 @@ contract PPC is Ownable, priced {
 
     function changeInitPrice(uint _price) external onlyOwner { initPrice = _price; }
 
-    function initialize(bytes32 id, bytes32 name, uint startTime) notPaused external payable costs(initPrice){
+    function initialize(bytes32 id, bytes32 name, uint startTime) notPaused external payable costs(initPrice) returns (uint bought){
 
         events.makeStandardEvent(id, name, startTime);
         events.addWager(id, initPrice);
         peepWallet.transfer(initPrice);
 
         // uint initialWager = msg.value - initPrice;
-        PPC(this).buy(id);
+        uint bought = PPC(this).buy(id);
 
+        return bought;
     }
 
     function buy(bytes32 eventId) notPaused external payable returns (uint bought){

@@ -21,12 +21,14 @@ if (Meteor.isClient) {
 
 Meteor.startup(function() {
     // set providor, which should be a geth node
-    // my RPC settings are: 
+    // my RPC settings are:
     // geth --rpc --rpcaddr="0.0.0.0" --rpccorsdomain="*" --mine --unlock=YOUR_ACCOUNT --verbosity=5 --maxpeers=0 --minerthreads="3"
+
+    // run for ganache: download ganache-cli and run it in terminal. This starts the test blockchain and allows app to work
 	let ganache;
 	try {
 		ganache = require("ganache-cli");
-	} catch(e){ console.log('unable to get ganache');}
+	} catch(e){ }
     let isTest = true;
 	let provider = isTest && ganache && ganache.provider ? ganache.provider() : new web3.providers.HttpProvider("http://127.0.0.1:8545");
     if(typeof web3 === 'undefined'){
