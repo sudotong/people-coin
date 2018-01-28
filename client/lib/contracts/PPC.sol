@@ -149,7 +149,7 @@ contract PPC is Ownable, priced {
         peepWallet.transfer(initPrice);
 
         // uint initialWager = msg.value - initPrice;
-        uint bought = PPC(this).buy(id);
+        bought = PPC(this).buy(id);
 
         return bought;
     }
