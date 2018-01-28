@@ -2,7 +2,7 @@
 	"dapp": {
 		"app": {
 			"title": "PeopleCoin",
-			"what": "What is this?"
+			"what": "How it Works"
 			, "buttons": {
 				"search": "Search"
 				, "account": "My Account"

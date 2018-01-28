@@ -11,11 +11,12 @@
             <!--<ul class="hide-on-med-and-down">-->
             <!--</ul>-->
             <ul class="right hide-on-med-and-down">
+                <li><a href="{{ pathFor 'guide' }}"><i class="material-icons left">info_outline</i>{{{i18n 'dapp.app.what'}}}</a></li>
                 <li><a href="{{ pathFor 'search' }}">{{{i18n 'dapp.app.buttons.search'}}}</a></li>
                 <li><a href="{{ pathFor 'account' }}">{{{i18n 'dapp.app.buttons.account'}}}</a></li>
             </ul>
             <ul class="side-nav" id="mobile-demo">
-                <li><a class="what-is-this" href="/guide"><i class="material-icons left">info_outline</i>{{{i18n 'dapp.app.what'}}}</a></li>
+                <li><a href="{{ pathFor 'guide' }}"><i class="material-icons left">info_outline</i>{{{i18n 'dapp.app.what'}}}</a></li>
                 <li><a href="{{ pathFor route='list.show' data=getTrending }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.trending'}}}</a></li>
                 <li><a href="{{ pathFor route='list.show' data=getTop }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.top'}}}</a></li>
                 <li><a href="{{ pathFor route='list.show' data=getNew }}"><i class="material-icons left">show_chart</i>{{{i18n 'dapp.app.buttons.new'}}}</a></li>
