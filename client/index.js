@@ -23,16 +23,20 @@ Meteor.startup(function() {
     // set providor, which should be a geth node
     // my RPC settings are: 
     // geth --rpc --rpcaddr="0.0.0.0" --rpccorsdomain="*" --mine --unlock=YOUR_ACCOUNT --verbosity=5 --maxpeers=0 --minerthreads="3"
-
-    let ganache = require("ganache-cli");
+	let ganache;
+	try {
+		ganache = require("ganache-cli");
+	} catch(e){ console.log('unable to get ganache');}
     let isTest = true;
-    let provider = isTest ? ganache.provider() : new web3.providers.HttpProvider("http://localhost:8545");
+	let provider = isTest && ganache && ganache.provider ? ganache.provider() : new web3.providers.HttpProvider("http://127.0.0.1:8545");
     if(typeof web3 === 'undefined'){
         web3 = new Web3(provider);
     } else {
-        web3 = new Web3(web3.currentProvider || provider);
+        web3.setProvider(web3.currentProvider || provider);      
     }
-    web3.setProvider(provider);
+
+    console.log('Default mnemonic is: candy maple cake sugar pudding cream honey rich smooth crumble sweet treat');
+    console.log('Connect to metamask with Custom RPC and in the New RPC Url enter http://127.0.0.1:8545');
 
     // Setup EthAccounts
     EthAccounts.init();

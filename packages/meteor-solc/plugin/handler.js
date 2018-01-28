@@ -28,30 +28,49 @@ class SolidityCompiler extends CachingCompiler {
 
 		var output = solc.compile(inputFile.getContentsAsString(), 1);
 
-		if (has(output, 'errors'))
-			return inputFile.error({
-				message: "Solidity errors: " + String(output.errors)
-			});
+		if (has(output, 'errors')){
+			console.log('errors for output file', output);
+            return inputFile.error({
+                message: "Solidity errors: " + String(output.errors)
+            });
+		}
+
 		
 		var results = output,
 			jsContent = "";
 
+
+		var addWeb3 = function(){
+            jsContent += "var web3 = {};";
+
+            jsContent += "if(typeof window.web3 !== 'undefined')";
+            jsContent += "web3 = window.web3;";
+
+            jsContent += "if(typeof window.web3 === 'undefined'";
+            jsContent += "  && typeof Web3 !== 'undefined')";
+            jsContent += "    web3 = new Web3();";
+		};
+
+		var addContractCode = function(contractName, name){
+            var preparse = JSON.stringify(results.contracts[contractName].interface, null, '\t');
+            jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(preparse).trim() + ')' + '; \n\n';
+
+            jsContent += "" + name + ".bytecode = '" + results.contracts[contractName].bytecode + "'; \n\n";
+		};
+
+
 		for (var contractName in results.contracts) {
-			if ((contractName.startsWith(":") ? contractName.substring(1) : contractName) == name) {
-				jsContent += "var web3 = {};";
-
-				jsContent += "if(typeof window.web3 !== 'undefined')";
-				jsContent += "web3 = window.web3;";
-
-				jsContent += "if(typeof window.web3 === 'undefined'";
-				jsContent += "  && typeof Web3 !== 'undefined')";
-				jsContent += "    web3 = new Web3();";
-
-				var preparse = JSON.stringify(results.contracts[contractName].interface, null, '\t');
-				console.log(preparse);
-				jsContent += "\n\n " + name + ' = ' + ' web3.eth.contract(' + JSON.parse(preparse).trim() + ')' + '; \n\n';
-
-				jsContent += "" + name + ".bytecode = '" + results.contracts[contractName].bytecode + "'; \n\n";
+            var correctedName = contractName.startsWith(":") ? contractName.substring(1) : contractName;
+			if (correctedName == name) {
+				addWeb3();
+                addContractCode(contractName, name);
+                console.log(' ');
+				console.log('ADDED '+name+' to context');
+			} else {
+                addWeb3();
+                addContractCode(contractName, correctedName);
+                console.log(' ');
+                console.log('NEEDS TO BE ADDED '+correctedName+' to context', );
 			}
 		}
 

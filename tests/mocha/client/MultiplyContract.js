@@ -4,7 +4,7 @@ var timeout = 20000;
 MochaWeb.testOnly(function(){    
     describe("web3 connectivity", function(){
         it("should connect to web3", function(done){
-            web3.setProvider(new web3.providers.HttpProvider("http://localhost:8545"));
+            web3.setProvider(new web3.providers.HttpProvider("http://127.0.0.1:8545"));
             done();
         });
 
