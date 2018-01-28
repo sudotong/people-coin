@@ -1,6 +1,6 @@
 <template name="views_list">
     <div class="row-fluid">
-        <h3>{{viewType}} People Bets</h3>
+        <h3 style="text-transform: uppercase">{{viewType}} People Bets</h3>
         {{#each friend in friends}}
             <div>({{friend.numTrades}}) <a href="/search/{{friend.screen_name}}">{{friend.screen_name}}</a> -- Last traded: {{formatTime friend.lastTrade "fromnow"}} -- Created: {{formatTime friend.created "MMM Do"}}</div>
         {{else}}

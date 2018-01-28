@@ -1,8 +1,7 @@
 <template name="components_peep">
     {{#if peep}}
         <div class="row">
-            <div class="col s2"></div>
-            <div class="col s2">
+            <div class="col offset-m2 m2 s8 offset-s2">
                 Last traded on {{formatTime peep.lastTrade "MMM Do"}}.
                 {{> components_peepChart peep=peep}}
                 <p class="flow-text">{{peep.bio}}</p>
@@ -10,8 +9,7 @@
                 <a class="waves-effect waves-light blue btn small">Share</a>
             </div>
 
-            <div class="col s1"></div>
-            <div class="col s2">
+            <div class="col offset-m1 m2 s8 offset-s2">
                 <div class="row">
                     <div class="col s12 card small" style="padding: 0;">
                         <div class="card-image">
@@ -27,9 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col s1"></div>
-            <div class="col s4">{{> components_transaction}}</div>
-            <div class="col s2"></div>
+            <div class="col offset-m1 m4 offset-s2 s8">{{> components_transaction}}</div>
 
         </div>
     {{/if}}

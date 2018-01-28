@@ -26,6 +26,9 @@ Template['views_search'].helpers({
     },
     'peeps': function(){
         return this.peeps;
+    },
+    'equalToFirst': function(index){
+        return index==0;
     }
 });
 

@@ -1,42 +1,50 @@
 <template name="views_search">
     {{#unless peep}}
         <div class="row">
-            <div class="col s2"></div>
-            <div class="col s8 centered">
+            <div class="col s12 m8 offset-m2 centered">
                 <h1 class="peepcoin_h1">PeopleCoin</h1>
                 <h2 class="peepcoin_h2">Bet on the people you know today, that will be great tomorrow.</h2>
             </div>
-            <div class="col s2"></div>
         </div>
     {{/unless}}
     <div class="row">
-        <div class="col s2"></div>
-        <div class="col s8">
+        <div class="col m8 offset-m2 s10 offset-s1">
             {{> components_searchBox}}
         </div>
-        <div class="col s2"></div>
     </div>
     {{#if peep}}
         {{> components_peep peep=peep}}
     {{else}}
         <div class="row">
             {{#if peeps}}
-                <div class="col s1"></div>
                 {{#each pp in peeps}}
-                    <div class="col s3">
-                        {{> components_peepSmall peep=pp}}
+                    <div class="hide-on-small-only">
+                    {{#if equalToFirst @index}}
+                        <div class="col m3 offset-m1">
+                            {{> components_peepSmall peep=pp}}
+                        </div>
+                    {{else}}
+                        <div class="col m3">
+                            {{> components_peepSmall peep=pp}}
+                        </div>
+                    {{/if}}
+
+                    </div>
+                    <div class="hide-on-med-and-up">
+                        {{#if equalToFirst @index}}
+                            <div class="col offset-s1 s10">
+                                {{> components_peepSmall peep=pp}}
+                            </div>
+                        {{/if}}
                     </div>
                 {{/each}}
-                <div class="col s1"></div>
             {{else}}
-                <div class="col s2"></div>
-                <div class="col s4">
+                <div class="col offset-m2 m4">
                     Try searching for your favorite celebrity
                 </div>
-                <div class="col s4">
+                <div class="col ms4">
                     Or your most promising friend
                 </div>
-                <div class="col s2"></div>
             {{/if}}
         </div>
     {{/if}}

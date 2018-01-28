@@ -21,12 +21,12 @@
 				, "coinbase": "Coinbase"
 				, "listening": "Listening"
 				, "peerCount": "Peer Count"
-				, "blockNumber": "Block Numbr"
+				, "blockNumber": "Block Number"
 				, "defaultBlock": "Default Block"
 				, "mining": "Mining"
 				, "gasPrice": "Gas Price"
 			}
-			, "copyright": "Copyright © NazeCoin 2018. All Rights Reserved"
+			, "copyright": "Copyright © PeopleCoin 2018. All Rights Reserved"
 		}
 		, "components": {
 			"balance": {
@@ -52,11 +52,11 @@
 				, "placeholder": "Number To Buy"
 			}
 			, "multiplyContract": {
-				"header": "Multiply Contract"
-				, "description": "Create a new contract and interact with it through the api call method. Note, if the multiply result remains zero you may not have enough ETH."
-				, "create": "Create New Contract"
+				"header": "Sell Contract"
+				, "description": "Sell holdings. Note, if the sell result remains zero you may not have enough ETH for the transaction fee."
+				, "create": "Sell"
 				, "deployed": "The contract was deployed to this address"
-				, "placeholder": "Number To Multiply"
+				, "placeholder": "Number To Sell"
 			}
 			, "networkHealth": {
 				"header": "Network Health"			
