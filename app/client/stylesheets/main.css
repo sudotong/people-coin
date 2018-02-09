@@ -43,6 +43,31 @@
     font-weight: 700;
 }
 
+.peepcoin_h3{
+    font-family: 'Poppins', sans-serif;
+    text-transform: none;
+    background: none;
+    color:gray;
+    font-size: 25px;
+    font-weight: 500;
+}
+
+.explanation{
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.explanation h2, .explanation h3{
+    text-align: center;
+}
+
+.explanation img{
+    width: 116%;
+    left: -8%;
+    position: relative;
+}
+
 .peepcoin_h2{
     font-family: 'Poppins', sans-serif;
     text-transform: none;
