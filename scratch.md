@@ -2,6 +2,8 @@
   Events: 0xb8d18710ca663294a0fc560fa33bad5534ab78c3
   PPC: 0xcf54b62f8b87e5823dc00f924711ef2505ab8a76
 
+Use these keys in code (eth-settings.json)!!
+
 
   To deploy:
 

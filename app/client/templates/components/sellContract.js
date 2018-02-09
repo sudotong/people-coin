@@ -96,6 +96,7 @@ Template['components_sellContract'].events({
         
         // call MultiplyContract method `multiply` which should multiply the `value` by 7
 		contractInstance.multiply.call(value, function(err, result){
+            console.log('result from contract',result, result.toNumber(10))
             TemplateVar.set(template, 'sellResult'
                             , result.toNumber(10));
             

@@ -10,7 +10,7 @@ Run Geth:
 (use etherbase address: `45d71b61cb4394bfee56ba926cf1f134dd7d500a`)
 
 Run Meteor from `app` directory:
-```meteor```
+```meteor --settings eth-settings.json```
 
 ### Prerequisites
 
@@ -43,6 +43,18 @@ $ truffle compile
 $ truffle migrate
 ```
 Tab3: truffle console
+
+### Updating smart contracts
+
+Make changes in smart contract, make sure the same files are in ./contracts and ./app/client/lib/contracts
+
+Run:
+
+`truffle.cmd compile && truffle.cmd migrate && truffle.cmd console` from root directory
+
+eth-settings need to be updated with new compiled contract values
+
+meteor --settings eth-settings.json 
 
 
 ### Break down into end to end tests

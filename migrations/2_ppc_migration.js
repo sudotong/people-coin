@@ -24,7 +24,7 @@ module.exports = function(deployer, network, accounts) {
     events.setRewardsContract(rewards.address);
     ppc.setRewardsContract(rewards.address);
     ppc.setEventsContract(events.address);
-    return ppc.setPPCWallet("0xbbb79c56d731ddb310ac03b89851ef454ea57ec6");
+    return ppc.setPPCWallet("0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb");
 
   })
 };

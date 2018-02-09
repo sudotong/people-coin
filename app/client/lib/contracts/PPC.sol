@@ -59,30 +59,21 @@ contract Rewards is Ownable {
 
     function subEth(address user, uint amount) external onlyAuth { ethBalance[user] -= amount; }
 
-    function subPeep(address user, uint amount, bytes32 eventId) external onlyAuth { peepBalance[user][eventId] -= amount; }
+    function subPeep(address user, uint amount, bytes32 eventId) external { peepBalance[user][eventId] -= amount; }
 
     function addEth(address user, uint amount) external onlyAuth { ethBalance[user] += amount; }
 
-    function addPeep(address user, uint amount, bytes32 eventId) external onlyAuth { peepBalance[user][eventId] += amount; }
+    function addPeep(address user, uint amount, bytes32 eventId) external { peepBalance[user][eventId] += amount; }
 
 }
 
-contract priced {
-    modifier costs(uint price) {
-        if (msg.value >= price) {
-            _;
-        }
-    }
-}
-
-contract PPC is Ownable, priced {
+contract PPC is Ownable {
 
     address peepWallet;
     Events events;
     Rewards rewards;
 
-    bool  contractPaused = false;
-    uint  peepBalance = 0;
+    bool contractPaused = false;
     uint public playerFunds = 0;
     uint initPrice = 0.001 ether;
 
@@ -91,6 +82,11 @@ contract PPC is Ownable, priced {
 
     modifier notPaused() {
         require (!contractPaused);
+        _;
+    }
+
+    modifier initialCost() {
+        require(msg.value > initPrice);
         _;
     }
 
@@ -109,14 +105,14 @@ contract PPC is Ownable, priced {
         _;
     }
 
-    function () payable public {
+    function () public payable {
         if (msg.sender != address(events)) {
             playerFunds += msg.value;
         }
     }
 
     // Constructor
-    function PPC () payable public {
+    function PPC () public payable {
         peepWallet = 0x10f5125ECEdd1a0c13de969811A8c8Aa2139eCeb; //TODO: Update with actual token address
     }
 
@@ -133,7 +129,7 @@ contract PPC is Ownable, priced {
     function abandonContract() external onlyPaused {
         require(!abandoned[msg.sender]);
         abandoned[msg.sender] = true;
-        uint ethBalance =  rewards.getEthBalance(msg.sender);
+        uint ethBalance = rewards.getEthBalance(msg.sender);
         playerFunds -= ethBalance;
         if (ethBalance > 0) {
             msg.sender.transfer(ethBalance);
@@ -142,7 +138,7 @@ contract PPC is Ownable, priced {
 
     function changeInitPrice(uint _price) external onlyOwner { initPrice = _price; }
 
-    function initialize(bytes32 id, bytes32 name, uint startTime) notPaused external payable costs(initPrice) returns (uint bought){
+    function initialize(bytes32 id, bytes32 name, uint startTime) external notPaused initialCost payable returns (uint bought) {
 
         events.makeStandardEvent(id, name, startTime);
         events.addWager(id, initPrice);
@@ -154,10 +150,11 @@ contract PPC is Ownable, priced {
         return bought;
     }
 
-    function buy(bytes32 eventId) notPaused external payable returns (uint bought){
+    function buy(bytes32 eventId) external notPaused payable returns (uint bought) {
         uint tradePrice = events.getTradePrice(eventId);
         uint amount = msg.value / tradePrice;                     // calculates the amount
-        require(msg.value == amount * tradePrice);  // make sure we dont get a division error
+        //require(msg.value == amount * tradePrice);
+        // TODO integer division rounds down.
 
 
         events.addWager(eventId, amount);
@@ -169,8 +166,9 @@ contract PPC is Ownable, priced {
         return amount;
     }
 
-    function sell(bytes32 eventId, uint amount) notPaused onlyStaker(eventId) external returns (uint revenue){
-        require(rewards.getPeepBalance(msg.sender, eventId) < amount );        // checks if the sender has enough to sell
+    function sell(bytes32 eventId, uint amount) notPaused onlyStaker(eventId) external returns (uint revenue) {
+        require(rewards.getPeepBalance(msg.sender, eventId) < amount);
+        // checks if the sender has enough to sell
 
         uint tradePrice = events.getTradePrice(eventId);
         uint ethValue = tradePrice * amount;
@@ -190,9 +188,9 @@ contract PPC is Ownable, priced {
 
     function pauseContract() public onlyOwner { contractPaused = true; }
 
-    function addToPlayerFunds (uint amount) public onlyAuth { playerFunds += amount; }
+    function addToPlayerFunds (uint amount) public { playerFunds += amount; }
 
-    function subFromPlayerFunds (uint amount) public onlyAuth { playerFunds -= amount; }
+    function subFromPlayerFunds (uint amount) public { playerFunds -= amount; }
 
     function getContractPaused() public constant returns (bool) { return contractPaused; }
 
@@ -212,7 +210,7 @@ contract Events is Ownable {
         uint totalAmountBet;
         uint activeEventIndex;
         bool cancelled;
-        address[] Stakers;
+        address[] stakers;
     }
 
     mapping (bytes32 => StandardWagerEvent) standardEvents;
@@ -243,7 +241,7 @@ contract Events is Ownable {
       */
     function makeStandardEvent(bytes32 id, bytes32 name, uint startTime) external {
         StandardWagerEvent memory thisEvent;
-        thisEvent = StandardWagerEvent( name, startTime, 0, 0, activeEvents.length, false, emptyAddrArray);
+        thisEvent = StandardWagerEvent(name, startTime, 0, 0, activeEvents.length, false, emptyAddrArray);
         standardEvents[id] = thisEvent;
         eventsCount++;
         activeEvents.push(id);
@@ -257,7 +255,7 @@ contract Events is Ownable {
         uint lastItem = activeEvents.length - 1;
         activeEvents[indexToDelete] = activeEvents[lastItem]; // Write over item to delete with last item
         standardEvents[activeEvents[lastItem]].activeEventIndex = indexToDelete; //Point what was the last item to its new spot in array
-        activeEvents.length -- ; // Delete what is now duplicate entry in last spot
+        activeEvents.length --; // Delete what is now duplicate entry in last spot
     }
 
     function removeEventFromActive (bytes32 eventId) public onlyAuth {
@@ -265,11 +263,11 @@ contract Events is Ownable {
         uint lastItem = activeEvents.length - 1;
         activeEvents[indexToDelete] = activeEvents[lastItem]; // Write over item to delete with last item
         standardEvents[activeEvents[lastItem]].activeEventIndex = indexToDelete; //Point what was the last item to its new spot in array
-        activeEvents.length -- ; // Delete what is now duplicate entry in last spot
+        activeEvents.length --; // Delete what is now duplicate entry in last spot
     }
 
     function removeWager (bytes32 eventId, uint value) external {
-        if (isStaker(eventId, msg.sender)){
+        if (isStaker(eventId, msg.sender)) {
             standardEvents[eventId].numWagers --;
             standardEvents[eventId].totalAmountBet -= value;
         }
