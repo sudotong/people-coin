@@ -1,4 +1,4 @@
-var app = angular.module('NazeCoin', []);
+var app = angular.module('PeopleCoin', []);
 
 app.controller('myCtrl', function($scope, TwitterService){
 	$scope.getUser = function(username){

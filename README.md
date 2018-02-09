@@ -89,13 +89,13 @@ Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c6
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/sudotong/naze-coin/tags).
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/sudotong/people-coin/tags).
 
 ## Authors
 
 * **Sam Udotong** - *Initial work* - [sudotong](https://github.com/sudotong)
 
-See also the list of [contributors](https://github.com/sudotong/naze-coin/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/sudotong/people-coin/contributors) who participated in this project.
 
 ## License
 
