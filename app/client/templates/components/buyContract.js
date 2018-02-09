@@ -79,13 +79,15 @@ Template['components_buyContract'].events({
             // multiply by 10 hack for testing
             // if(!err) transactionObjectPPC.gas = estimateGas * 100;
             console.log('estimate gas for PPC: ', estimateGas);
-            PPC.new(transactionObjectPPC, function(err, ppccontract){
+            PPC.deployed(function(err, ppccontract){
                 if(err) return TemplateVar.set(template, 'state', {isError: true, error: String(err)});
                 web3.eth.estimateGas(transactionObjectEvent, function(err, estimateGas){
                     // multiply by 10 hack for testing
                     // if(!err) transactionObjectEvent.gas = estimateGas * 100;
+                    if (ppccontractInstance) return;
+                    ppccontractInstance = "initializing";
                     console.log('estimate gas for event: ', estimateGas);
-                    Events.new(transactionObjectEvent, function(err, eventcontract){
+                    Events.deployed(function(err, eventcontract){
                         clearTimeout(mineTimeout);
                         if(err) return TemplateVar.set(template, 'state', {isError: true, error: String(err)});
 
@@ -122,13 +124,13 @@ Template['components_buyContract'].events({
 	"keyup #buyValue": function(event, template){
         // the input value
         if (event.which == 13) {
-            let value = template.find("#buyValue").value;
+            let value = template.find("#buyValue").value || 1;
             if (ppccontractInstance){
                 if (eventcontractInstance){
                     eventcontractInstance.getTradePrice.call(template.data.peep.screen_name, function(err,result){
                         if(err) TemplateVar.set(template, 'buyResult', String(err));
-                        console.log('the price is ', result, result ? result.toNumber(10) : null);
-                        ppccontractInstance.buy(template.data.peep.screen_name, {value: result ? result.toNumber(10)+10 : 1000000, from: web3.eth.accounts[0]},function(err, result){
+                        console.log('the price is ', result, result ? value*(result.toNumber(10)) : null);
+                        ppccontractInstance.buy(template.data.peep.screen_name, {value: result ? value*(result.toNumber(10)+10) : 1000000, from: web3.eth.accounts[0]},function(err, result){
                             // this is the amount bought
 
                             console.log('the result of .buy() is ', result, result ? result.toNumber(10) : null);

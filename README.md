@@ -9,7 +9,7 @@ Run Geth:
 
 (use etherbase address: `45d71b61cb4394bfee56ba926cf1f134dd7d500a`)
 
-Run Meteor:
+Run Meteor from `app` directory:
 ```meteor```
 
 ### Prerequisites
@@ -22,7 +22,7 @@ You will need to download the go-ethereum client, and you will need to have inst
 Install Geth (go-ethereum).
 Windows: https://github.com/ethereum/go-ethereum/wiki/Installation-instructions-for-Windows
 
-Run `meteor npm install`
+Run `meteor npm install` from `app` directory
 
 ## Running the tests
 

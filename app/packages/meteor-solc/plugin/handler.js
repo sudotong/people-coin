@@ -70,7 +70,7 @@ class SolidityCompiler extends CachingCompiler {
                 addWeb3();
                 addContractCode(contractName, correctedName);
                 console.log(' ');
-                console.log('NEEDS TO BE ADDED '+correctedName+' to context', );
+                console.log('ALSO ADDED '+correctedName+' to context', );
 			}
 		}
 

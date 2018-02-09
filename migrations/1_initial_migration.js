@@ -1,5 +1,6 @@
-// let Naze = artifacts.require("./Naze.sol");
-//
-// module.exports = function(deployer) {
-//   deployer.deploy(Naze);
-// };
+var Migrations = artifacts.require("Migrations");
+
+module.exports = function(deployer) {
+  // Deploy the Migrations contract as our only task
+  deployer.deploy(Migrations);
+};
