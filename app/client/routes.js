@@ -150,8 +150,17 @@ Router.route('/faq', {
     name: 'faq'
 });
 
-function defaultView(self){
-    self.layout('layout_main');
+Router.route('/view/:_id', function(){
+    defaultView(this, 'full');
+    this.render('views_airtable', {
+        data: {table: this.params._id}
+    });
+}, {
+    name: 'airtable',
+});
+
+function defaultView(self, isFull){
+    self.layout(isFull == 'full' ? 'layout_main_full' : 'layout_main');
     self.render('layout_header', {to: 'header'});
     self.render('layout_footer', {to: 'footer'});
 }

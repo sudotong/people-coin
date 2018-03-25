@@ -77,6 +77,10 @@
     font-weight: 500;
 }
 
+.nav-wrapper a{
+    color: #4a90e2 !important;
+}
+
 #mobile-demo li > a{
     color: #4a90e2;
     font-weight: normal;
@@ -90,6 +94,15 @@
     height: 230px;
     position: relative;
     border: solid white 3px;
+}
+
+.container-fluid-full{
+    width: 100%; 
+    position:relative;
+    top: -20px;
+    /* height: calc(100% - 64px); 
+    position:absolute;
+    top:64px; */
 }
 
 .card-image a{

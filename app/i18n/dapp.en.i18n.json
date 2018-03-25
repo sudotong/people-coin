@@ -67,6 +67,10 @@
 				"placeholder" : "Search for a twitter handle..."
 			}
 		}
+		, "airtable": {
+			"title": "View"
+			, "defaultName": "View"
+		}
 		, "search": {
 			"title": "Search"
 			, "defaultName": "search"
